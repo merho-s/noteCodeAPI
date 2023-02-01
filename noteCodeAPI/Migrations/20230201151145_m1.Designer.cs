@@ -11,7 +11,7 @@ using noteCodeAPI.Tools;
 namespace noteCodeAPI.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    [Migration("20230131110610_m1")]
+    [Migration("20230201151145_m1")]
     partial class m1
     {
         /// <inheritdoc />
@@ -24,19 +24,37 @@ namespace noteCodeAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("NoteTag", b =>
+            modelBuilder.Entity("CodetagNote", b =>
                 {
+                    b.Property<int>("CodetagsId")
+                        .HasColumnType("int");
+
                     b.Property<int>("NotesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagsId")
-                        .HasColumnType("int");
+                    b.HasKey("CodetagsId", "NotesId");
 
-                    b.HasKey("NotesId", "TagsId");
+                    b.HasIndex("NotesId");
 
-                    b.HasIndex("TagsId");
+                    b.ToTable("CodetagNote");
+                });
 
-                    b.ToTable("NoteTag");
+            modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("codetag");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
@@ -75,24 +93,6 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("note");
                 });
 
-            modelBuilder.Entity("noteCodeAPI.Models.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("tag");
-                });
-
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>
                 {
                     b.Property<int>("Id")
@@ -115,17 +115,17 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("NoteTag", b =>
+            modelBuilder.Entity("CodetagNote", b =>
                 {
-                    b.HasOne("noteCodeAPI.Models.Note", null)
+                    b.HasOne("noteCodeAPI.Models.Codetag", null)
                         .WithMany()
-                        .HasForeignKey("NotesId")
+                        .HasForeignKey("CodetagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("noteCodeAPI.Models.Tag", null)
+                    b.HasOne("noteCodeAPI.Models.Note", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("NotesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -133,12 +133,17 @@ namespace noteCodeAPI.Migrations
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
                 {
                     b.HasOne("noteCodeAPI.Models.UserApp", "User")
-                        .WithMany()
+                        .WithMany("Notes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

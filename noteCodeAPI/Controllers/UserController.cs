@@ -3,6 +3,8 @@ using noteCodeAPI.Services.Interfaces;
 
 namespace noteCodeAPI.Controllers
 {
+    [ApiController]
+    [Route("api/v1/login")]
     public class UserController : ControllerBase
     {
         private ILogin _login;
@@ -12,8 +14,8 @@ namespace noteCodeAPI.Controllers
             _login = login;
         }
 
-        [HttpPost("login")]
-        public IActionResult Login([FromForm] string username, string password)
+        [HttpPost]
+        public IActionResult Login([FromForm] string username, [FromForm] string password)
         {
             string token = _login.Login(username, password);
             if(token != null) 

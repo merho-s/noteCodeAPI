@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using noteCodeAPI.Tools;
 
@@ -10,9 +11,11 @@ using noteCodeAPI.Tools;
 namespace noteCodeAPI.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class DataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230201131438_m0")]
+    partial class m0
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,37 +24,19 @@ namespace noteCodeAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CodetagNote", b =>
+            modelBuilder.Entity("NoteTag", b =>
                 {
-                    b.Property<int>("CodetagsId")
-                        .HasColumnType("int");
-
                     b.Property<int>("NotesId")
                         .HasColumnType("int");
 
-                    b.HasKey("CodetagsId", "NotesId");
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("NotesId");
+                    b.HasKey("NotesId", "TagsId");
 
-                    b.ToTable("CodetagNote");
-                });
+                    b.HasIndex("TagsId");
 
-            modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("codetag");
+                    b.ToTable("NoteTag");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
@@ -90,6 +75,24 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("note");
                 });
 
+            modelBuilder.Entity("noteCodeAPI.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tag");
+                });
+
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>
                 {
                     b.Property<int>("Id")
@@ -112,17 +115,17 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("CodetagNote", b =>
+            modelBuilder.Entity("NoteTag", b =>
                 {
-                    b.HasOne("noteCodeAPI.Models.Codetag", null)
-                        .WithMany()
-                        .HasForeignKey("CodetagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("noteCodeAPI.Models.Note", null)
                         .WithMany()
                         .HasForeignKey("NotesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noteCodeAPI.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

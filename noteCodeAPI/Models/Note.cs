@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace noteCodeAPI.Models
 {
@@ -10,7 +11,7 @@ namespace noteCodeAPI.Models
         private string? description;
         private string? image;
         private string? code;
-        private List<Tag>? tags;
+        private List<Codetag>? codetags;
         private UserApp user;
 
         [Column("id")]
@@ -27,16 +28,19 @@ namespace noteCodeAPI.Models
 
         [Column("code")]
         public string? Code { get => code; set => code = value; }
-        public List<Tag>? Tags { get => tags; set => tags = value; }
+
+        public List<Codetag>? Codetags { get => codetags; set => codetags = value; }
+
+        [JsonIgnore]
+        [ForeignKey("UserId")]
         public UserApp User { get => user; set => user = value; }
 
-        [ForeignKey("User")]
         [Column("user_id")]
         public int UserId { get; set; }
 
         public Note()
         {
-            Tags = new();
+            Codetags = new();
         }
     }
 }

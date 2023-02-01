@@ -87,3 +87,7 @@ C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\refi
 C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\noteCodeAPI.pdb
 C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\noteCodeAPI.genruntimeconfig.cache
 C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\ref\noteCodeAPI.dll
+C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\System.Net.Http.Formatting.dll
+C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\System.Web.Http.dll
+C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Swashbuckle.Core.dll

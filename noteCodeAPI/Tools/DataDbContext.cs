@@ -7,7 +7,7 @@ namespace noteCodeAPI.Tools
     {
         public DbSet<UserApp> Users { get; set; }
         public DbSet<Note> Notes { get;set; }
-        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Codetag> Codetags { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

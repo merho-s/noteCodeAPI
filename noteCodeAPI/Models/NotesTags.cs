@@ -15,7 +15,7 @@ namespace noteCodeAPI.Models
 
         public Note Note { get; set; }
 
-        public Tag Tag { get; set; }
+        public Codetag Tag { get; set; }
         
     }
 }

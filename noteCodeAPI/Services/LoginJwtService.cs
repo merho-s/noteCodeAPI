@@ -16,9 +16,9 @@ namespace noteCodeAPI.Services
         {
             _repository = repository;
         }
-        public string Login(string name, string password)
+        public string Login(string username, string password)
         {
-            UserApp user = _repository.SearchOne(u => u.Username == name && u.Password == password);
+            UserApp user = _repository.SearchOne(u => u.Username == username && u.Password == password);
             if (user != null)
             {
                 //Créer le token 
@@ -29,8 +29,7 @@ namespace noteCodeAPI.Services
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Bonjour je suis la clé de sécurité pour générer la JWT")), SecurityAlgorithms.HmacSha256),
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.)
+                    new Claim(ClaimTypes.Name, user.Username)
                     }),
                     Issuer = "sogeti",
                     Audience = "sogeti"

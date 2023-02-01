@@ -2,8 +2,8 @@
 
 namespace noteCodeAPI.Models
 {
-    [Table("tag")]
-    public class Tag
+    [Table("codetag")]
+    public class Codetag
     {
         private int id;
         private string? name;

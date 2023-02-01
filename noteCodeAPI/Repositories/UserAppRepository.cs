@@ -18,12 +18,12 @@ namespace noteCodeAPI.Repositories
 
         public override List<UserApp> GetAll()
         {
-            return _dbContext.Users.ToList();
+            return _dbContext.Users.Include(u => u.Notes).ToList();
         }
 
         public override UserApp? GetById(int id)
         {
-            return _dbContext.Users.FirstOrDefault(u => u.Id == id);
+            return _dbContext.Users.Include(u => u.Notes).FirstOrDefault(u => u.Id == id);
         }
 
         public override bool Save(UserApp element)
@@ -34,7 +34,7 @@ namespace noteCodeAPI.Repositories
 
         public UserApp SearchOne(Func<UserApp, bool> searchMethod)
         {
-            return _dbContext.Users.FirstOrDefault(searchMethod);
+            return _dbContext.Users.Include(u => u.Notes).FirstOrDefault(searchMethod);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace noteCodeAPI.Models
         private int id;
         private string? username;
         private string? password;
+        private List<Note> notes;
 
         [Column("id")]
         public int Id { get => id; set => id = value; }
@@ -17,5 +18,7 @@ namespace noteCodeAPI.Models
 
         [Column("password")]
         public string? Password { get => password; set => password = value ?? throw new ArgumentNullException(nameof(value)); }
+
+        public List<Note> Notes { get => notes; set => notes = value; }
     }
 }
