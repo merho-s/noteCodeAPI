@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using noteCodeAPI.DTOs;
 using noteCodeAPI.Models;
 using noteCodeAPI.Repositories;
+using noteCodeAPI.Services;
 using Swashbuckle.Swagger;
 using System.Reflection;
 using System.Security.Claims;
@@ -13,101 +14,41 @@ namespace noteCodeAPI.Controllers
     [ApiController]
     public class NoteController : ControllerBase
     {
-        private NoteRepository _noteRepos;
-        private UserAppRepository _userRepos;
-        private CodetagRepository _codetagRepos;
+    
+        private NoteService _noteService;
 
-        public NoteController(NoteRepository noteRepos, UserAppRepository userRepos, CodetagRepository tagRepos)
+        public NoteController(NoteService noteService)
         {
-            _noteRepos = noteRepos;
-            _userRepos = userRepos;
-            _codetagRepos = tagRepos;
+            _noteService = noteService;
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult PostNote([FromForm] NoteRequestDTO noteRequest, IFormFile image)
+        public IActionResult PostNote([FromForm] NoteRequestDTO noteRequest, IFormFile imageFile)
         {
-            List<Codetag> codetags = new List<Codetag>();
-            noteRequest.Codetags.ForEach(t => codetags.Add(_codetagRepos.GetByName(t.Name)));
-            Note note = new Note()
+            try
             {
-                Title = noteRequest.Title,
-                Description = noteRequest.Description,
-                Code = noteRequest.Code,
-                Codetags = codetags
-            };
-
-            if (image == null || image.Length== 0 )
+                NoteResponseDTO noteResponse = _noteService.AddNote(noteRequest, imageFile);
+                return Ok(noteResponse);
+            } catch (Exception ex)
             {
-                return BadRequest("No image file found.");
-            }
-
-            var userClaims = HttpContext.User;
-            string username = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-            UserApp loggedUser = _userRepos.SearchOne(u => u.Username == username);
-            Console.WriteLine(loggedUser.Id);
-            if (loggedUser != null)
-            {
-                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "assets", image.FileName);
-                FileStream fileStream = new(filePath, FileMode.Create);
-                image.CopyTo(fileStream);
-                note.Image = filePath;
-                note.UserId = loggedUser.Id;
-                if (_noteRepos.Save(note))
-                {
-                    NoteResponseDTO noteResponse = new()
-                    {
-                        Title = note.Title,
-                        Description = note.Description,
-                        Code = note.Code,
-                        Image = note.Image
-                    };
-                    note.Codetags.ForEach(t =>
-                    {
-                        CodetagDTO tagResponse = new() { Name = t.Name };
-                        noteResponse.Codetags.Add(tagResponse);
-                    });
-                    return Ok(noteResponse);
-                }
-                return BadRequest("Database error");
-
-            }
-            return Unauthorized("Logged user not found in database !");
-
-            
+                return StatusCode(500, new { ex.Message });
+            } 
         }
 
         [Authorize]
         [HttpGet]
         public IActionResult GetNotes()
         {
-            List<NoteResponseDTO> notesResponse = new();
-            var userClaims = HttpContext.User;
-            string username = userClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-            UserApp loggedUser = _userRepos.SearchOne(u => u.Username == username);
-            if (loggedUser != null)
+            try
             {
-                _noteRepos.GetAllByUserId(loggedUser.Id).ForEach(n =>
-                {
-                    NoteResponseDTO noteResponse = new()
-                    {
-                        Title = n.Title,
-                        Description = n.Description,
-                        Code = n.Code,
-                        Image = n.Code,
-                    };
-                    n.Codetags.ForEach(t =>
-                    {
-                        CodetagDTO tagResponse = new() { Name = t.Name };
-                        noteResponse.Codetags.Add(tagResponse);
-                    });
-
-                    notesResponse.Add(noteResponse);
-                });
+                List<NoteResponseDTO> notesResponse = _noteService.GetNotesList();
                 return Ok(notesResponse);
             }
-            return Unauthorized();
+            catch (Exception ex)
+            { 
+                return StatusCode(500, new { ex.Message });
+            }
         }
     }
 }

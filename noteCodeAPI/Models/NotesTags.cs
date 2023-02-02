@@ -5,6 +5,9 @@ namespace noteCodeAPI.Models
     [Table("notes_tags")]
     public class NotesTags
     {
+        [Column("id")]
+        public int Id { get; set; }
+        
         [ForeignKey("Note")]
         [Column("note_id")]
         public int NoteId { get; set; }
@@ -14,7 +17,7 @@ namespace noteCodeAPI.Models
         public int TagId { get; set; }
 
         public Note Note { get; set; }
-
+       
         public Codetag Tag { get; set; }
         
     }

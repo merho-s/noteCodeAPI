@@ -55,6 +55,9 @@ builder.Services.AddScoped<NoteRepository>();
 builder.Services.AddScoped<UserAppRepository>();
 builder.Services.AddScoped<CodetagRepository>();
 builder.Services.AddScoped<ILogin, LoginJwtService>();
+builder.Services.AddScoped<NoteService>();
+builder.Services.AddScoped<UserAppService>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(a =>
 {
