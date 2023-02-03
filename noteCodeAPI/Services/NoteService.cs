@@ -1,4 +1,5 @@
 ﻿using noteCodeAPI.DTOs;
+using noteCodeAPI.Exceptions;
 using noteCodeAPI.Models;
 using noteCodeAPI.Repositories;
 using System.Security.Claims;
@@ -19,36 +20,41 @@ namespace noteCodeAPI.Services
             _userService = userService;
         }
 
-        public NoteResponseDTO AddNote(NoteRequestDTO noteRequest, IFormFile imageFile)
+        public NoteResponseDTO AddNote(NoteRequestDTO noteRequest)
         {
             UserApp loggedUser = _userService.GetLoggedUser();
-            if (loggedUser != null)
-            {
+            //if (loggedUser != null)
+            //{
                 Note newNote = new Note()
                 {
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
                     Code = noteRequest.Code,
-                    User = loggedUser
+                    User = null
+                    //User = loggedUser
                 };
-                noteRequest.Codetags.ForEach(t =>
+
+                if(noteRequest.Codetags != null)
                 {
-                    Codetag newCodetag = _codetagRepos.GetByName(t.Name);
-                    if (newCodetag != null)
+                    noteRequest.Codetags.ForEach(t =>
                     {
-                        newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = newCodetag });
-                    }
-                    else new Exception("Tags don't exist !");
-                });
-
-                try
-                {
-                    newNote.Image = UploadNoteImage(imageFile);
-                } catch (Exception uploadException)
-                {
-                    throw uploadException;
+                        Codetag newCodetag = _codetagRepos.GetByName(t.Name);
+                        if (newCodetag != null)
+                        {
+                            newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = newCodetag });
+                        }
+                        else throw new TagsDontExistException();
+                    });   
                 }
+                else throw new TagsDontExistException();
 
+            newNote.Image = UploadNoteImage(noteRequest.Image);
+                if(newNote.Image == null)
+                {
+                    throw new UploadException();
+                }
+               
+                
                 if (_noteRepos.Save(newNote))
                 {
                     NoteResponseDTO noteResponse = new NoteResponseDTO()
@@ -66,10 +72,11 @@ namespace noteCodeAPI.Services
 
                     return noteResponse;
                 }
-                throw new Exception("Database error");
+                else throw new DatabaseException();
 
-            }
-            else throw new Exception("Logged user not found");
+            //}
+            //else throw new NotLoggedUserException();
+            
         }
 
         public string UploadNoteImage(IFormFile imageFile)
@@ -80,7 +87,7 @@ namespace noteCodeAPI.Services
             if (filePath != null && imageFile != null)
             {
                 return filePath;
-            } throw new Exception("Image uploading error");
+            } else return null;
         }
 
         public List<NoteResponseDTO> GetNotesList() 
@@ -105,7 +112,7 @@ namespace noteCodeAPI.Services
                     notesResponseList.Add(noteResponse);
                 });
                 return notesResponseList;
-            } throw new Exception("Logged user not found");
+            } throw new NotLoggedUserException();
         }
     }
 }

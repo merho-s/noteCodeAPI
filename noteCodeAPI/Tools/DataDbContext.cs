@@ -11,7 +11,7 @@ namespace noteCodeAPI.Tools
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=noteCodeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\msadiki\Documents\Travaux\noteCodeAPI\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30");
         }
     }
 }

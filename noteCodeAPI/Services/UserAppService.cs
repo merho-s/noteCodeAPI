@@ -7,7 +7,7 @@ namespace noteCodeAPI.Services
     public class UserAppService
     {
         private UserAppRepository _userRepos;
-        private IHttpContextAccessor _httpContextAccessor;
+        private IHttpContextAccessor? _httpContextAccessor;
 
         public UserAppService(UserAppRepository userRepos, IHttpContextAccessor httpContextAccessor)
         {
@@ -17,8 +17,19 @@ namespace noteCodeAPI.Services
 
         public UserApp GetLoggedUser()
         {
-            string usernameClaim = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-            return _userRepos.SearchOne(u => u.Username == usernameClaim);  
+            
+            try
+            {
+                string? usernameClaim = _httpContextAccessor?.HttpContext?.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+                return _userRepos.SearchOne(u => u.Username == usernameClaim);                
+            } 
+            catch (Exception ex)
+            {
+                return null;
+            };
+            
+            
+            
         }
     }
 }

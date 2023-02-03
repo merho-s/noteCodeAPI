@@ -10,6 +10,8 @@ namespace noteCodeAPI.DTOs
 
         public string Code { get; set; }
 
+        public IFormFile Image { get; set; }
+
         public List<CodetagDTO> Codetags { get; set; }
 
         public NoteRequestDTO() 

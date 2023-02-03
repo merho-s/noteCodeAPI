@@ -12,7 +12,7 @@ namespace noteCodeAPI.Models
         private string? image;
         private string? code;
         private List<NotesTags>? codetags;
-        private UserApp user;
+        private UserApp? user;
 
         [Column("id")]
         public int Id { get => id; set => id = value; }
@@ -32,11 +32,11 @@ namespace noteCodeAPI.Models
         public List<NotesTags>? Codetags { get => codetags; set => codetags = value; }
 
         [JsonIgnore]
-        public UserApp User { get => user; set => user = value; }
-
-        [ForeignKey("User")]
+        [ForeignKey("UserId")]
+        public UserApp? User { get => user; set => user = value; }
+       
         [Column("user_id")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public Note()
         {

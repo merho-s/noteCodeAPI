@@ -8,7 +8,6 @@ namespace noteCodeAPI.Models
         [Column("id")]
         public int Id { get; set; }
         
-        [ForeignKey("Note")]
         [Column("note_id")]
         public int NoteId { get; set; }
 
@@ -16,8 +15,10 @@ namespace noteCodeAPI.Models
         [Column("tag_id")]
         public int TagId { get; set; }
 
+        [ForeignKey("NoteId")]
         public Note Note { get; set; }
-       
+
+        [ForeignKey("TagId")]
         public Codetag Tag { get; set; }
         
     }
