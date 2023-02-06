@@ -23,9 +23,9 @@ namespace noteCodeAPI.Controllers
             _noteService = noteService;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
-        public IActionResult PostNote([FromForm] NoteRequestDTO noteRequest)
+        public IActionResult PostNote([FromBody] NoteRequestDTO noteRequest)
         {
             try
             {
@@ -34,23 +34,27 @@ namespace noteCodeAPI.Controllers
             } 
             catch (NotLoggedUserException ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, new { ex.Message });
             }
             catch (TagsDontExistException ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, new { ex.Message });
             }
             catch (UploadException ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, new { ex.Message });
             }
             catch (DatabaseException ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, new { ex.Message });
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public IActionResult GetNotes()
         {

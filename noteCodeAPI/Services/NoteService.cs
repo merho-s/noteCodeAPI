@@ -23,18 +23,17 @@ namespace noteCodeAPI.Services
         public NoteResponseDTO AddNote(NoteRequestDTO noteRequest)
         {
             UserApp loggedUser = _userService.GetLoggedUser();
-            //if (loggedUser != null)
-            //{
+            if (loggedUser != null)
+            {
                 Note newNote = new Note()
                 {
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
                     Code = noteRequest.Code,
-                    User = null
-                    //User = loggedUser
+                    User = loggedUser
                 };
 
-                if(noteRequest.Codetags != null)
+                if (noteRequest.Codetags != null)
                 {
                     noteRequest.Codetags.ForEach(t =>
                     {
@@ -48,13 +47,22 @@ namespace noteCodeAPI.Services
                 }
                 else throw new TagsDontExistException();
 
-            newNote.Image = UploadNoteImage(noteRequest.Image);
-                if(newNote.Image == null)
+                try
+                {
+                    newNote.Image = UploadNoteImage(noteRequest.Image);
+                }
+                catch (IOException IOEx)
+                {
+                    Console.WriteLine(IOEx.Message);
+                    throw new UploadException(IOEx.Message);
+                }
+
+                if (newNote.Image == null)
                 {
                     throw new UploadException();
                 }
-               
-                
+
+
                 if (_noteRepos.Save(newNote))
                 {
                     NoteResponseDTO noteResponse = new NoteResponseDTO()
@@ -74,8 +82,8 @@ namespace noteCodeAPI.Services
                 }
                 else throw new DatabaseException();
 
-            //}
-            //else throw new NotLoggedUserException();
+            }
+            else throw new NotLoggedUserException();
             
         }
 
@@ -84,6 +92,7 @@ namespace noteCodeAPI.Services
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "assets", imageFile.FileName);
             FileStream fileStream = new(filePath, FileMode.Create);
             imageFile.CopyTo(fileStream);
+            fileStream.Close();
             if (filePath != null && imageFile != null)
             {
                 return filePath;
