@@ -68,5 +68,29 @@ namespace noteCodeAPI.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public IActionResult GetNoteById(int id)
+        {
+            try
+            {
+                return Ok(_noteService.GetSingleNote(id));
+            }
+            catch (DatabaseException ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+            catch (NotLoggedUserException ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpGet("testget")]
+        public IActionResult GetAllNotes()
+        {
+            return Ok(_noteService.GetAllNotesTest());  
+        }
     }
 }

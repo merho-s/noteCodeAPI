@@ -114,14 +114,76 @@ namespace noteCodeAPI.Services
                         Code = n.Code,
                         Image = n.Image
                     };
+
                     n.Codetags.ForEach(t =>
                     {
-                        noteResponse.Codetags.Add(new CodetagDTO { Name = t.Tag.Name });
+                        if (t.TagId != null)
+                        {
+                            noteResponse.Codetags.Add(new CodetagDTO { Name = _codetagRepos.GetById(t.TagId).Name });
+                        }
                     });
+
                     notesResponseList.Add(noteResponse);
                 });
                 return notesResponseList;
             } throw new NotLoggedUserException();
+        }
+
+        public NoteResponseDTO GetSingleNote(int id)
+        {
+            UserApp loggedUser = _userService.GetLoggedUser();
+            Note singleNote = _noteRepos.GetById(id);
+            if(singleNote != null)
+            {
+                if (singleNote.User == loggedUser)
+                {
+                    NoteResponseDTO noteResponse = new()
+                    {
+                        Title = singleNote.Title,
+                        Description = singleNote.Description,
+                        Image = singleNote.Image,
+                        Code = singleNote.Code
+                    };
+
+                    singleNote.Codetags.ForEach(t =>
+                    {
+                        if (t.TagId != null)
+                        {
+                            noteResponse.Codetags.Add(new CodetagDTO { Name = _codetagRepos.GetById(t.TagId).Name });
+                        }
+                    });
+                    
+                    return noteResponse;
+                }
+                else throw new NotLoggedUserException("Actual logged user doesn't have access to this note because it's not his.");
+            } else throw new DatabaseException("This note dosen't exist.");
+        }
+
+        public List<NoteResponseDTO> GetAllNotesTest()
+        {
+            List<NoteResponseDTO> notesResponseList = new();
+            int i = 0;
+            _noteRepos.GetAll().ForEach(n =>
+            {
+                NoteResponseDTO noteResponse = new()
+                {
+                    Title = n.Title,
+                    Description = n.Description,
+                    Code = n.Code,
+                    Image = n.Image
+                };
+                i++;
+                n.Codetags.ForEach(t =>
+                {
+                    if (t.TagId != null)
+                    {
+                        noteResponse.Codetags.Add(new CodetagDTO { Name = _codetagRepos.GetById(t.TagId).Name });
+                    }
+                });
+
+                notesResponseList.Add(noteResponse);
+            });
+            return notesResponseList;
         }
     }
 }
