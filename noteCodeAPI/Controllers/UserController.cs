@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using noteCodeAPI.Services;
 using noteCodeAPI.Services.Interfaces;
 
 namespace noteCodeAPI.Controllers
@@ -7,22 +8,23 @@ namespace noteCodeAPI.Controllers
     [Route("api/v1/login")]
     public class UserController : ControllerBase
     {
-        private ILogin _login;
+        private UserAppService _userService;
 
-        public UserController(ILogin login)
+        public UserController(UserAppService userService)
         {
-            _login = login;
+            _userService = userService;
         }
 
         [HttpPost]
         public IActionResult Login([FromForm] string username, [FromForm] string password)
         {
-            string token = _login.Login(username, password);
-            if (token != null)
+            try
             {
-                return Ok(token);
+                return Ok(_userService.Login(username, password));
+            } catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
-            return StatusCode(402);
         }
     }
 }
