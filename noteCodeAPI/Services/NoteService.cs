@@ -20,7 +20,7 @@ namespace noteCodeAPI.Services
             _userService = userService;
         }
 
-        public NoteResponseDTO AddNote(NoteRequestDTO noteRequest)
+        public NoteResponseDTO AddNote(NoteRequestDTO noteRequest, IFormFile imageFile)
         {
             UserApp loggedUser = _userService.GetLoggedUser();
             if (loggedUser != null)
@@ -49,7 +49,7 @@ namespace noteCodeAPI.Services
 
                 try
                 {
-                    newNote.Image = UploadNoteImage(noteRequest.Image);
+                    newNote.Image = UploadNoteImage(imageFile);
                 }
                 catch (IOException IOEx)
                 {
@@ -67,6 +67,7 @@ namespace noteCodeAPI.Services
                 {
                     NoteResponseDTO noteResponse = new NoteResponseDTO()
                     {
+                        Id = newNote.Id,
                         Title = newNote.Title,
                         Description = newNote.Description,
                         Code = newNote.Code,
@@ -109,6 +110,7 @@ namespace noteCodeAPI.Services
                 {
                     NoteResponseDTO noteResponse = new()
                     {
+                        Id = n.Id,
                         Title = n.Title,
                         Description = n.Description,
                         Code = n.Code,
@@ -139,6 +141,7 @@ namespace noteCodeAPI.Services
                 {
                     NoteResponseDTO noteResponse = new()
                     {
+                        Id = singleNote.Id,
                         Title = singleNote.Title,
                         Description = singleNote.Description,
                         Image = singleNote.Image,
@@ -167,6 +170,7 @@ namespace noteCodeAPI.Services
             {
                 NoteResponseDTO noteResponse = new()
                 {
+                    Id = n.Id,
                     Title = n.Title,
                     Description = n.Description,
                     Code = n.Code,

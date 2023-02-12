@@ -18,7 +18,7 @@ namespace noteCodeAPI.Controllers
         public IActionResult Login([FromForm] string username, [FromForm] string password)
         {
             string token = _login.Login(username, password);
-            if(token != null) 
+            if (token != null)
             {
                 return Ok(token);
             }
