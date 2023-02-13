@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {}
+    "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {}
   },
   "projects": {
-    "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {
+    "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
+        "projectUniqueName": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
         "projectName": "noteCodeAPI",
-        "projectPath": "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
-        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCodeAPI\\noteCodeAPI\\obj\\",
+        "projectPath": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
+        "packagesPath": "C:\\Users\\mouss\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mouss\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -96,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
