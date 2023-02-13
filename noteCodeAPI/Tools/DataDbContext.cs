@@ -8,6 +8,7 @@ namespace noteCodeAPI.Tools
         public DbSet<UserApp> Users { get; set; }
         public DbSet<Note> Notes { get;set; }
         public DbSet<Codetag> Codetags { get; set; }
+        public DbSet<UnusedActiveToken> UnusedActiveTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -10,15 +10,15 @@ namespace noteCodeAPI.Services
 {
     public class LoginJwtService : ILogin
     {
-        private UserAppRepository _repository;
+        private UserAppRepository _userRepos;
 
-        public LoginJwtService(UserAppRepository repository)
+        public LoginJwtService(UserAppRepository userRepos)
         {
-            _repository = repository;
+            _userRepos = userRepos;
         }
         public string Login(string username, string password)
         {
-            UserApp user = _repository.SearchOne(u => u.Username == username && u.Password == password);
+            UserApp user = _userRepos.SearchOne(u => u.Username == username && u.Password == password);
             if (user != null)
             {
                 //Créer le token 
@@ -26,10 +26,10 @@ namespace noteCodeAPI.Services
                 SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
                 {
                     Expires = DateTime.Now.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Bonjour je suis la clé de sécurité pour générer la JWT")), SecurityAlgorithms.HmacSha256),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?")), SecurityAlgorithms.HmacSha256),
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                    new Claim(ClaimTypes.Name, user.Username)
+                        new Claim(ClaimTypes.Name, user.Username)
                     }),
                     Issuer = "sogeti",
                     Audience = "sogeti"

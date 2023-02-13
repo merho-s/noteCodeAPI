@@ -71,7 +71,7 @@ builder.Services.AddAuthentication(a =>
     ValidateLifetime = true,
     ValidateAudience = true,
     ValidAudience = "sogeti",
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Bonjour je suis la clé de sécurité pour générer la JWT")),
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?")),
 
 });
 builder.Services.AddAuthorization((builder) =>
