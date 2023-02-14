@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using noteCodeAPI.Middlewares;
 using noteCodeAPI.Repositories;
 using noteCodeAPI.Services;
 using noteCodeAPI.Services.Interfaces;
@@ -54,6 +55,7 @@ builder.Services.AddDbContext<DataDbContext>();
 builder.Services.AddScoped<NoteRepository>();
 builder.Services.AddScoped<UserAppRepository>();
 builder.Services.AddScoped<CodetagRepository>();
+builder.Services.AddScoped<UnusedActiveTokenRepository>();
 builder.Services.AddScoped<ILogin, LoginJwtService>();
 builder.Services.AddScoped<NoteService>();
 builder.Services.AddScoped<UserAppService>();
@@ -71,7 +73,7 @@ builder.Services.AddAuthentication(a =>
     ValidateLifetime = true,
     ValidateAudience = true,
     ValidAudience = "sogeti",
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?")),
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")),
 
 });
 builder.Services.AddAuthorization((builder) =>
@@ -94,7 +96,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+//app.UseMiddleware<IsTokenBannedMiddleware>();   
 app.UseHttpsRedirection();
 app.UseCors("all");
 app.UseAuthentication();

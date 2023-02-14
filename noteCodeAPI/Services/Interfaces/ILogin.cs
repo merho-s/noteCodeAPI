@@ -1,7 +1,9 @@
-﻿namespace noteCodeAPI.Services.Interfaces
+﻿using noteCodeAPI.DTOs;
+
+namespace noteCodeAPI.Services.Interfaces
 {
     public interface ILogin
     {
-        public string Login(string username, string password);
+        public LoginResponseDTO Login(string username, string password);
     }
 }

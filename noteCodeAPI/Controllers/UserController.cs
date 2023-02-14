@@ -9,10 +9,12 @@ namespace noteCodeAPI.Controllers
     [Route("api/v1/user")]
     public class UserController : ControllerBase
     {
+        private ILogin _loginService;
         private UserAppService _userService;
 
-        public UserController(UserAppService userService)
+        public UserController(ILogin loginService, UserAppService userService)
         {
+            _loginService = loginService;
             _userService = userService;
         }
 
@@ -21,7 +23,21 @@ namespace noteCodeAPI.Controllers
         {
             try
             {
-                return Ok(_userService.Login(username, password));
+                return Ok(_loginService.Login(username, password));
+            }
+            catch (AuthenticationException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+        [HttpPost("bantoken")]
+        public IActionResult BanToken()
+        {
+            try
+            {
+                return Ok(_userService.BanCurrentToken() + "is banned.");
             }
             catch (NotLoggedUserException ex)
             {
@@ -31,50 +47,6 @@ namespace noteCodeAPI.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-        }
-
-        [HttpPost("bantoken")]
-        public IActionResult BanToken()
-        {
-            try
-            {
-                return Ok(_userService.AddUnusedActiveToken());
-            }catch (DatabaseException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPost("unbantoken/{tokenId}")]
-        public IActionResult UnbanToken(int tokenId)
-        {
-            try
-            {
-                return Ok(_userService.RemoveUnusedActiveToken(tokenId));
-            }
-            catch (DatabaseException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPost("logout")]
-        public IActionResult Logout()
-        {
-            try
-            {
-                _userService.Logout();
-                return Ok("User logged out.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-
         }
 
     }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using noteCodeAPI.DTOs;
+using noteCodeAPI.Exceptions;
 using noteCodeAPI.Models;
 using noteCodeAPI.Repositories;
 using noteCodeAPI.Services.Interfaces;
@@ -16,7 +18,7 @@ namespace noteCodeAPI.Services
         {
             _userRepos = userRepos;
         }
-        public string Login(string username, string password)
+        public LoginResponseDTO Login(string username, string password)
         {
             UserApp user = _userRepos.SearchOne(u => u.Username == username && u.Password == password);
             if (user != null)
@@ -26,7 +28,7 @@ namespace noteCodeAPI.Services
                 SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
                 {
                     Expires = DateTime.Now.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?")), SecurityAlgorithms.HmacSha256),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")), SecurityAlgorithms.HmacSha256),
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim(ClaimTypes.Name, user.Username)
@@ -36,9 +38,15 @@ namespace noteCodeAPI.Services
 
                 };
                 SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
-                return jwtSecurityTokenHandler.WriteToken(securityToken);
+                LoginResponseDTO loginResponse = new()
+                {
+                    UserId = user.Id,
+                    Token = jwtSecurityTokenHandler.WriteToken(securityToken),
+                    ExpirationDate = securityToken.ValidTo
+                };
+                return loginResponse;
             }
-            return null;
+            throw new AuthenticationException();
         }
     }
 }

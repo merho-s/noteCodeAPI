@@ -102,6 +102,29 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("notes_tags");
                 });
 
+            modelBuilder.Entity("noteCodeAPI.Models.UnusedActiveToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("expiration_date");
+
+                    b.Property<string>("JwtToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("token");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("unused_active_token");
+                });
+
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>
                 {
                     b.Property<int>("Id")
