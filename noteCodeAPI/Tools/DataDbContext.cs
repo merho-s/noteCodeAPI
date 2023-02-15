@@ -10,10 +10,14 @@ namespace noteCodeAPI.Tools
         public DbSet<Codetag> Codetags { get; set; }
         public DbSet<UnusedActiveToken> UnusedActiveTokens { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DataDbContext(DbContextOptions options) : base(options)
         {
-            string currentDirectory = Directory.GetCurrentDirectory();
-            optionsBuilder.UseSqlServer(@$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30");
+
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    string currentDirectory = Directory.GetCurrentDirectory();
+        //    optionsBuilder.UseSqlServer(@$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30");
+        //}
     }
 }

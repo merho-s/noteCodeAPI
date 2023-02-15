@@ -21,14 +21,16 @@ namespace noteCodeAPI.Middlewares
         public async Task InvokeAsync(HttpContext context)
         {
             Token tokenResponse = (Token)_userService.GetCurrentTokenInfos();
-            List<string> unusedTokens = new();
-            _unusedTokenRepos.GetAll().ForEach(t => unusedTokens.Add(t.JwtToken));
-            if (unusedTokens.Contains(tokenResponse.JwtToken))
+            if (tokenResponse != null)
             {
-                context.Response.StatusCode = 401;
-                return;
+                List<string> unusedTokens = new();
+                _unusedTokenRepos.GetAll().ForEach(t => unusedTokens.Add(t.JwtToken));
+                if (unusedTokens.Contains(tokenResponse.JwtToken))
+                {
+                    context.Response.StatusCode = 401;
+                    return;
+                }
             }
-
             await _next(context);
 
         }

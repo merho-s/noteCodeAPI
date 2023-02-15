@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using noteCodeAPI.Middlewares;
@@ -51,14 +53,19 @@ builder.Services.AddCors(options =>
         policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
-builder.Services.AddDbContext<DataDbContext>();
-builder.Services.AddScoped<NoteRepository>();
-builder.Services.AddScoped<UserAppRepository>();
-builder.Services.AddScoped<CodetagRepository>();
-builder.Services.AddScoped<UnusedActiveTokenRepository>();
-builder.Services.AddScoped<ILogin, LoginJwtService>();
-builder.Services.AddScoped<NoteService>();
-builder.Services.AddScoped<UserAppService>();
+string currentDirectory = Directory.GetCurrentDirectory();
+builder.Services.AddDbContext<DataDbContext>(options =>
+
+    options.UseSqlServer(@$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30"),
+    ServiceLifetime.Singleton
+);
+builder.Services.AddSingleton<NoteRepository>();
+builder.Services.AddSingleton<UserAppRepository>();
+builder.Services.AddSingleton<CodetagRepository>();
+builder.Services.AddSingleton<UnusedActiveTokenRepository>();
+builder.Services.AddSingleton<ILogin, LoginJwtService>();
+builder.Services.AddSingleton<NoteService>();
+builder.Services.AddSingleton<UserAppService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(a =>
@@ -96,7 +103,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//app.UseMiddleware<IsTokenBannedMiddleware>();   
+app.UseMiddleware<IsTokenBannedMiddleware>();   
 app.UseHttpsRedirection();
 app.UseCors("all");
 app.UseAuthentication();

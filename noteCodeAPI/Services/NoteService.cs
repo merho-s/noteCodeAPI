@@ -165,7 +165,7 @@ namespace noteCodeAPI.Services
         public List<NoteResponseDTO> GetAllNotesTest()
         {
             List<NoteResponseDTO> notesResponseList = new();
-            int i = 0;
+            
             _noteRepos.GetAll().ForEach(n =>
             {
                 NoteResponseDTO noteResponse = new()
@@ -176,7 +176,7 @@ namespace noteCodeAPI.Services
                     Code = n.Code,
                     Image = n.Image
                 };
-                i++;
+                
                 n.Codetags.ForEach(t =>
                 {
                     if (t.TagId != null)

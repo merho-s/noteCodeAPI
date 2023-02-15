@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using noteCodeAPI.Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace noteCodeAPI.Models
 {
@@ -8,6 +9,7 @@ namespace noteCodeAPI.Models
         private int id;
         private string? username;
         private string? password;
+        private Role role;
         private List<Note> notes;
 
         [Column("id")]
@@ -18,6 +20,9 @@ namespace noteCodeAPI.Models
 
         [Column("password")]
         public string? Password { get => password; set => password = value ?? throw new ArgumentNullException(nameof(value)); }
+
+        [Column("role")]
+        public Role Role { get => role; set => role = value; }
 
         public List<Note> Notes { get => notes; set => notes = value; }
     }

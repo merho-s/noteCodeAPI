@@ -29,7 +29,6 @@ namespace noteCodeAPI.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-
         }
 
         [HttpPost("bantoken")]
@@ -37,7 +36,7 @@ namespace noteCodeAPI.Controllers
         {
             try
             {
-                return Ok(_userService.BanCurrentToken() + "is banned.");
+                return Ok("This token is out of usage: " + _userService.BanCurrentToken());
             }
             catch (NotLoggedUserException ex)
             {

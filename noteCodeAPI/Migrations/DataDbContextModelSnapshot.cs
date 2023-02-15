@@ -138,6 +138,10 @@ namespace noteCodeAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("password");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int")
+                        .HasColumnName("role");
+
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("username");

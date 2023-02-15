@@ -39,6 +39,40 @@ namespace noteCodeAPI.Services
             };
         }
 
+        public string BanCurrentToken()
+        {
+            Token currentToken = (Token)GetCurrentTokenInfos();
+            if (currentToken != null)
+            {
+                UnusedActiveToken unusedActiveToken = new()
+                {
+                    JwtToken = currentToken.JwtToken,
+                    ExpirationDate = currentToken.ExpirationDate
+                };
+                if (_unusedTokenRepos.Save(unusedActiveToken))
+                {
+                    return unusedActiveToken.JwtToken;
+                }
+                throw new DatabaseException();
+            } throw new NotLoggedUserException();              
+        }
+        
+        public IToken GetCurrentTokenInfos()
+        {
+            string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            if (token != null && token != "")
+            {
+                JwtSecurityToken jwtToken = new JwtSecurityToken(token);
+                Token tokenResponse = new()
+                {
+                    JwtToken = token,
+                    User = GetLoggedUser(),
+                    ExpirationDate = jwtToken.ValidTo
+                };
+                return tokenResponse; 
+            } return null;
+        }
+
         //public LoginResponseDTO Login(string username, string password)
         //{
         //    string token = _login.Login(username, password);
@@ -63,40 +97,5 @@ namespace noteCodeAPI.Services
                 
         //    } throw new NotLoggedUserException("Your username or password is wrong.");
         //}
-
-        public string BanCurrentToken()
-        {
-            Token currentToken = (Token)GetCurrentTokenInfos();
-            if (currentToken != null)
-            {
-                UnusedActiveToken unusedActiveToken = new()
-                {
-                    JwtToken = currentToken.JwtToken,
-                    ExpirationDate = currentToken.ExpirationDate
-                };
-                if (_unusedTokenRepos.Save(unusedActiveToken))
-                {
-                    return unusedActiveToken.JwtToken;
-                }
-                throw new DatabaseException();
-            } throw new NotLoggedUserException();   
-            
-        }
-        
-        public IToken GetCurrentTokenInfos()
-        {
-            string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            if (token != null)
-            {
-                JwtSecurityToken jwtToken = new JwtSecurityToken(token);
-                Token tokenResponse = new()
-                {
-                    JwtToken = token,
-                    User = GetLoggedUser(),
-                    ExpirationDate = jwtToken.ValidTo
-                };
-                return tokenResponse; 
-            } return null;
-        }
     }
 }
