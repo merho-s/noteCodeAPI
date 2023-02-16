@@ -103,11 +103,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<IsTokenBannedMiddleware>();   
+
 app.UseHttpsRedirection();
 app.UseCors("all");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<LoggingMiddleware>();
+app.UseMiddleware<IsTokenBannedMiddleware>();   
 
 app.MapControllers();
 

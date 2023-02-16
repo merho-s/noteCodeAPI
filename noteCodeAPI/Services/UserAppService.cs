@@ -39,6 +39,23 @@ namespace noteCodeAPI.Services
             };
         }
 
+        public IToken GetCurrentTokenInfos()
+        {
+            string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            if (token != null && token != "")
+            {
+                JwtSecurityToken jwtToken = new JwtSecurityToken(token);
+                Token tokenResponse = new()
+                {
+                    JwtToken = token,
+                    User = GetLoggedUser(),
+                    ExpirationDate = jwtToken.ValidTo
+                };
+                return tokenResponse;
+            }return null;
+
+        }
+
         public string BanCurrentToken()
         {
             Token currentToken = (Token)GetCurrentTokenInfos();
@@ -57,28 +74,13 @@ namespace noteCodeAPI.Services
             } throw new NotLoggedUserException();              
         }
         
-        public IToken GetCurrentTokenInfos()
-        {
-            string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            if (token != null && token != "")
-            {
-                JwtSecurityToken jwtToken = new JwtSecurityToken(token);
-                Token tokenResponse = new()
-                {
-                    JwtToken = token,
-                    User = GetLoggedUser(),
-                    ExpirationDate = jwtToken.ValidTo
-                };
-                return tokenResponse; 
-            } return null;
-        }
 
         //public LoginResponseDTO Login(string username, string password)
         //{
         //    string token = _login.Login(username, password);
         //    List<string> unusedTokens = new();
-        //    _unusedTokenRepos.GetAll().ForEach(t => unusedTokens.Add(t.Token));
-          
+        //    _unusedTokenRepos.GetAll().ForEach(t => unusedTokens.Add(t.JwtToken));
+
         //    if (token != null && !unusedTokens.Contains(token))
         //    {
         //        JwtSecurityToken jwtToken = new JwtSecurityToken(token);
@@ -93,9 +95,11 @@ namespace noteCodeAPI.Services
         //                ExpirationDate = jwtToken.ValidTo
         //            };
         //            return loginResponse;
-        //        } throw new DatabaseException("Database error: User not found.");
-                
-        //    } throw new NotLoggedUserException("Your username or password is wrong.");
+        //        }
+        //        throw new DatabaseException("Database error: User not found.");
+
+        //    }
+        //    throw new NotLoggedUserException("Your username or password is wrong.");
         //}
     }
 }

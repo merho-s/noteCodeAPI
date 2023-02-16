@@ -41,7 +41,7 @@ namespace noteCodeAPI.Services
                 SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
                 LoginResponseDTO loginResponse = new()
                 {
-                    UserId = user.Id,
+                    Username = user.Username,
                     Token = jwtSecurityTokenHandler.WriteToken(securityToken),
                     ExpirationDate = securityToken.ValidTo
                 };
