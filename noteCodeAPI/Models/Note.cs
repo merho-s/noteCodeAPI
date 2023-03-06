@@ -9,8 +9,8 @@ namespace noteCodeAPI.Models
         private int id;
         private string? title;
         private string? description;
-        private string? image;
-        private string? code;
+        //private string? image;
+        private List<CodeSnippet>? codes;
         private List<NotesTags>? codetags;
         private UserApp? user;
 
@@ -18,18 +18,16 @@ namespace noteCodeAPI.Models
         public int Id { get => id; set => id = value; }
 
         [Column("title")]
-        public string? Title { get => title; set => title = value ?? throw new ArgumentNullException(nameof(value)); }
+        public string? Title { get => title; set => title = value; }
 
         [Column("description")]
-        public string? Description { get => description; set => description = value ?? throw new ArgumentNullException(nameof(value)); }
+        public string? Description { get => description; set => description = value; }
 
-        [Column("image")]
-        public string? Image { get => image; set => image = value; }
-
-        [Column("code")]
-        public string? Code { get => code; set => code = value; }
+        //[Column("image")]
+        //public string? Image { get => image; set => image = value; }
 
         public List<NotesTags>? Codetags { get => codetags; set => codetags = value; }
+        public List<CodeSnippet>? Codes { get => codes; set => codes = value; }
 
         [JsonIgnore]
         [ForeignKey("UserId")]
@@ -41,6 +39,7 @@ namespace noteCodeAPI.Models
         public Note()
         {
             Codetags = new();
+            Codes = new();
         }
     }
 }

@@ -47,7 +47,8 @@ namespace noteCodeAPI.Services
                 }
                 else throw new TagsDontExistException();
 
-                try
+                //Upload image
+                /*try
                 {
                     newNote.Image = UploadNoteImage(imageFile);
                 }
@@ -55,7 +56,7 @@ namespace noteCodeAPI.Services
                 {
                     Console.WriteLine(IOEx.Message);
                     throw new UploadException(IOEx.Message);
-                }
+                }*/
 
                 if (newNote.Image == null)
                 {

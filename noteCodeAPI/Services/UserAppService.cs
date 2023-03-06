@@ -52,7 +52,7 @@ namespace noteCodeAPI.Services
                     ExpirationDate = jwtToken.ValidTo
                 };
                 return tokenResponse;
-            }return null;
+            } return null;
 
         }
 
@@ -74,32 +74,5 @@ namespace noteCodeAPI.Services
             } throw new NotLoggedUserException();              
         }
         
-
-        //public LoginResponseDTO Login(string username, string password)
-        //{
-        //    string token = _login.Login(username, password);
-        //    List<string> unusedTokens = new();
-        //    _unusedTokenRepos.GetAll().ForEach(t => unusedTokens.Add(t.JwtToken));
-
-        //    if (token != null && !unusedTokens.Contains(token))
-        //    {
-        //        JwtSecurityToken jwtToken = new JwtSecurityToken(token);
-        //        string? usernameClaim = jwtToken.Claims?.FirstOrDefault(c => c.Type == "unique_name").Value;
-        //        UserApp loggedUser = _userRepos.SearchOne(u => u.Username == usernameClaim);
-        //        if (loggedUser != null)
-        //        {
-        //            LoginResponseDTO loginResponse = new()
-        //            {
-        //                Token = token,
-        //                UserId = loggedUser.Id,
-        //                ExpirationDate = jwtToken.ValidTo
-        //            };
-        //            return loginResponse;
-        //        }
-        //        throw new DatabaseException("Database error: User not found.");
-
-        //    }
-        //    throw new NotLoggedUserException("Your username or password is wrong.");
-        //}
     }
 }
