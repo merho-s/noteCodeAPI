@@ -20,18 +20,21 @@ namespace noteCodeAPI.Services
             _userService = userService;
         }
 
-        public NoteResponseDTO AddNote(NoteRequestDTO noteRequest, IFormFile imageFile)
+        public NoteResponseDTO AddNote(NoteRequestDTO noteRequest/*, IFormFile imageFile*/)
         {
             UserApp loggedUser = _userService.GetLoggedUser();
+            
             if (loggedUser != null)
             {
+                List<CodeSnippet> newCodes = new();
                 Note newNote = new Note()
                 {
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
-                    Code = noteRequest.Code,
-                    User = loggedUser
+                    User = loggedUser,
+                    Codes = noteRequest.Codes.Select(el => new CodeSnippet() { Code = el.Code, Description = el.Description}).ToList(),
                 };
+                
 
                 if (noteRequest.Codetags != null)
                 {
@@ -56,12 +59,12 @@ namespace noteCodeAPI.Services
                 {
                     Console.WriteLine(IOEx.Message);
                     throw new UploadException(IOEx.Message);
-                }*/
+                }
 
                 if (newNote.Image == null)
                 {
                     throw new UploadException();
-                }
+                }*/
 
 
                 if (_noteRepos.Save(newNote))
@@ -71,14 +74,11 @@ namespace noteCodeAPI.Services
                         Id = newNote.Id,
                         Title = newNote.Title,
                         Description = newNote.Description,
-                        Code = newNote.Code,
-                        Image = newNote.Image
-                    };
+                        Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description }).ToList(),
+                        Codetags = newNote.Codetags.Select(el => new CodetagDTO() { Name = el.Tag.Name}).ToList()
+                    //Image = newNote.Image
+                };
 
-                    newNote.Codetags.ForEach(t =>
-                    {
-                        noteResponse.Codetags.Add(new CodetagDTO() { Name = t.Tag.Name });
-                    });
 
                     return noteResponse;
                 }
@@ -114,17 +114,17 @@ namespace noteCodeAPI.Services
                         Id = n.Id,
                         Title = n.Title,
                         Description = n.Description,
-                        Code = n.Code,
-                        Image = n.Image
-                    };
-
-                    n.Codetags.ForEach(t =>
-                    {
-                        if (t.TagId != null)
+                        Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description }).ToList(),
+                        Codetags = n.Codetags.Select(el =>
                         {
-                            noteResponse.Codetags.Add(new CodetagDTO { Name = _codetagRepos.GetById(t.TagId).Name });
-                        }
-                    });
+                            Codetag codetag = _codetagRepos.GetById(el.TagId);
+                            if (codetag != null)
+                            {
+                                return new CodetagDTO { Name = codetag.Name };
+                            }
+                            throw new TagsDontExistException();
+                        }).ToList()
+                    };
 
                     notesResponseList.Add(noteResponse);
                 });
@@ -145,17 +145,18 @@ namespace noteCodeAPI.Services
                         Id = singleNote.Id,
                         Title = singleNote.Title,
                         Description = singleNote.Description,
-                        Image = singleNote.Image,
-                        Code = singleNote.Code
-                    };
-
-                    singleNote.Codetags.ForEach(t =>
-                    {
-                        if (t.TagId != null)
+                        Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description }).ToList(),
+                        Codetags = singleNote.Codetags.Select(el =>
                         {
-                            noteResponse.Codetags.Add(new CodetagDTO { Name = _codetagRepos.GetById(t.TagId).Name });
-                        }
-                    });
+                            Codetag codetag = _codetagRepos.GetById(el.TagId);
+                            if (codetag != null)
+                            {
+                                return new CodetagDTO { Name = codetag.Name };
+                            }
+                            throw new TagsDontExistException();
+                        }).ToList()
+                        //Image = singleNote.Image,
+                    };
                     
                     return noteResponse;
                 }
@@ -174,17 +175,18 @@ namespace noteCodeAPI.Services
                     Id = n.Id,
                     Title = n.Title,
                     Description = n.Description,
-                    Code = n.Code,
-                    Image = n.Image
-                };
-                
-                n.Codetags.ForEach(t =>
-                {
-                    if (t.TagId != null)
+                    Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description }).ToList(),
+                    Codetags = n.Codetags.Select(el =>
                     {
-                        noteResponse.Codetags.Add(new CodetagDTO { Name = _codetagRepos.GetById(t.TagId).Name });
-                    }
-                });
+                        Codetag codetag = _codetagRepos.GetById(el.TagId);
+                        if (codetag != null)
+                        {
+                            return new CodetagDTO { Name = codetag.Name };
+                        }
+                        throw new TagsDontExistException();
+                    }).ToList()
+                    //Image = n.Image
+                };
 
                 notesResponseList.Add(noteResponse);
             });

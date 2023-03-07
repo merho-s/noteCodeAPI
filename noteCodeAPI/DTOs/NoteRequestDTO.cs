@@ -8,7 +8,7 @@ namespace noteCodeAPI.DTOs
 
         public string Description { get; set; }
 
-        public string Code { get; set; }
+        public List<CodeSnippetDTO> Codes { get; set; }
 
         //public IFormFile Image { get; set; }
 
@@ -17,6 +17,7 @@ namespace noteCodeAPI.DTOs
         public NoteRequestDTO() 
         {
             Codetags = new();
+            Codes = new();
         }
     }
 }

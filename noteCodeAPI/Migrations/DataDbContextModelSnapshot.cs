@@ -22,6 +22,34 @@ namespace noteCodeAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("noteCodeAPI.Models.CodeSnippet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("code");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
+                    b.Property<int>("NoteId")
+                        .HasColumnType("int")
+                        .HasColumnName("note_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("code_snippet");
+                });
+
             modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
                 {
                     b.Property<int>("Id")
@@ -49,17 +77,9 @@ namespace noteCodeAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("code");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("description");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("image");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)")
@@ -151,6 +171,17 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("noteCodeAPI.Models.CodeSnippet", b =>
+                {
+                    b.HasOne("noteCodeAPI.Models.Note", "Note")
+                        .WithMany("Codes")
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Note");
+                });
+
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
                 {
                     b.HasOne("noteCodeAPI.Models.UserApp", "User")
@@ -186,6 +217,8 @@ namespace noteCodeAPI.Migrations
 
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
                 {
+                    b.Navigation("Codes");
+
                     b.Navigation("Codetags");
                 });
 

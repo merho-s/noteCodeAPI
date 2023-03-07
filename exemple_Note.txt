@@ -1,0 +1,15 @@
+{
+  "title": "Literal type",
+  "description": "On peut typer une variable par des valeurs",
+  "codes": [
+    {
+      "code": "likePicture(id : number, type : ‘like’ | ‘unlike’) : void {}",
+      "description": "Dans cet exemple « ‘like’ | ‘unlike’ » devient un type qu’on appelle un « literal type »."
+    }
+  ],
+  "codetags": [
+    {
+      "name": "TypeScript"
+    }
+  ]
+}

@@ -27,6 +27,7 @@ namespace noteCodeAPI.Models
         //public string? Image { get => image; set => image = value; }
 
         public List<NotesTags>? Codetags { get => codetags; set => codetags = value; }
+
         public List<CodeSnippet>? Codes { get => codes; set => codes = value; }
 
         [JsonIgnore]

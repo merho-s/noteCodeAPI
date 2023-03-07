@@ -18,17 +18,17 @@ namespace noteCodeAPI.Repositories
 
         public override List<Note> GetAll()
         {
-            return _dbContext.Notes.Include(n => n.Codetags).ToList();        
+            return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).ToList();        
         }
 
         public override Note? GetById(int id)
         {
-            return _dbContext.Notes.Include(n => n.Codetags).FirstOrDefault(n => n.Id == id);
+            return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).FirstOrDefault(n => n.Id == id);
         }
 
         public List<Note> GetAllByUserId(int userId)
         {
-            return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.User).Where(n => n.User.Id == userId).ToList();
+            return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).Where(n => n.User.Id == userId).ToList();
         }
 
         public override bool Save(Note element)

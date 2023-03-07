@@ -25,11 +25,11 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult PostNote([FromBody] NoteRequestDTO noteRequest, [FromForm] IFormFile imageFile)
+        public IActionResult PostNote([FromBody] NoteRequestDTO noteRequest/*, [FromForm] IFormFile imageFile*/)
         {
             try
             {
-                NoteResponseDTO noteResponse = _noteService.AddNote(noteRequest, imageFile);
+                NoteResponseDTO noteResponse = _noteService.AddNote(noteRequest);
                 return Ok(noteResponse);
             } 
             catch (NotLoggedUserException ex)
