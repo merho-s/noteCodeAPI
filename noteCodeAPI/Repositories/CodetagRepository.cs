@@ -17,12 +17,12 @@ namespace noteCodeAPI.Repositories
 
         public override List<Codetag> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbContext.Codetags.Include(t => t.Aliases).ToList();
         }
 
         public override Codetag GetById(int id)
         {
-            return _dbContext.Codetags.Include(t => t.Notes).FirstOrDefault(t => t.Id == id);
+            return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Id == id);
         }
 
         public override bool Save(Codetag element)
@@ -32,7 +32,12 @@ namespace noteCodeAPI.Repositories
 
         public Codetag GetByName(string name)
         {
-            return _dbContext.Codetags.Include(t => t.Notes).FirstOrDefault(t => t.Name == name);
+            return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+        }
+
+        public Codetag GetByAlias(TagAlias alias)
+        {
+            return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Aliases.Contains(alias));
         }
     }
 }

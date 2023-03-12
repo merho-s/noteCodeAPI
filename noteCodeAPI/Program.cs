@@ -63,6 +63,7 @@ builder.Services.AddSingleton<NoteRepository>();
 builder.Services.AddSingleton<UserAppRepository>();
 builder.Services.AddSingleton<CodetagRepository>();
 builder.Services.AddSingleton<UnusedActiveTokenRepository>();
+builder.Services.AddSingleton<TagAliasRepository>();
 builder.Services.AddSingleton<ILogin, LoginJwtService>();
 builder.Services.AddSingleton<NoteService>();
 builder.Services.AddSingleton<UserAppService>();

@@ -39,15 +39,20 @@ namespace noteCodeAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("description");
 
+                    b.Property<int?>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<int>("NoteId")
                         .HasColumnType("int")
                         .HasColumnName("note_id");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LanguageId");
+
                     b.HasIndex("NoteId");
 
-                    b.ToTable("code_snippet");
+                    b.ToTable("code_snippet", (string)null);
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
@@ -65,7 +70,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("codetag");
+                    b.ToTable("codetag", (string)null);
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
@@ -93,7 +98,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("note");
+                    b.ToTable("note", (string)null);
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.NotesTags", b =>
@@ -119,7 +124,32 @@ namespace noteCodeAPI.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("notes_tags");
+                    b.ToTable("notes_tags", (string)null);
+                });
+
+            modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CodetagId")
+                        .HasColumnType("int")
+                        .HasColumnName("codetag_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodetagId");
+
+                    b.ToTable("codetag_alias", (string)null);
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UnusedActiveToken", b =>
@@ -142,7 +172,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("unused_active_token");
+                    b.ToTable("unused_active_token", (string)null);
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>
@@ -168,16 +198,22 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.CodeSnippet", b =>
                 {
+                    b.HasOne("noteCodeAPI.Models.TagAlias", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId");
+
                     b.HasOne("noteCodeAPI.Models.Note", "Note")
                         .WithMany("Codes")
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Language");
 
                     b.Navigation("Note");
                 });
@@ -210,8 +246,21 @@ namespace noteCodeAPI.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
+                {
+                    b.HasOne("noteCodeAPI.Models.Codetag", "Codetag")
+                        .WithMany("Aliases")
+                        .HasForeignKey("CodetagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Codetag");
+                });
+
             modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
                 {
+                    b.Navigation("Aliases");
+
                     b.Navigation("Notes");
                 });
 

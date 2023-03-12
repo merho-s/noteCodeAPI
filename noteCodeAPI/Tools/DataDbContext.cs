@@ -9,6 +9,7 @@ namespace noteCodeAPI.Tools
         public DbSet<Note> Notes { get;set; }
         public DbSet<Codetag> Codetags { get; set; }
         public DbSet<UnusedActiveToken> UnusedActiveTokens { get; set; }
+        public DbSet<TagAlias> TagAliases { get; set; }
 
         public DataDbContext(DbContextOptions options) : base(options)
         {

@@ -25,5 +25,9 @@ namespace noteCodeAPI.Models
         public Role Role { get => role; set => role = value; }
 
         public List<Note> Notes { get => notes; set => notes = value; }
+        public UserApp() 
+        {
+            Notes = new();
+        }
     }
 }
