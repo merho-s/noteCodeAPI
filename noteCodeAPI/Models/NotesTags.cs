@@ -11,7 +11,6 @@ namespace noteCodeAPI.Models
         [Column("note_id")]
         public int NoteId { get; set; }
 
-        [ForeignKey("Tag")]
         [Column("tag_id")]
         public int TagId { get; set; }
 

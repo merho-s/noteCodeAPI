@@ -9,7 +9,7 @@ namespace noteCodeAPI.Models
         private int id;
         private string? code;
         private string? description;
-        private TagAlias? language;
+        private string? language;
 
         [Column("id")]
         public int Id { get => id; set => id = value; }
@@ -20,7 +20,8 @@ namespace noteCodeAPI.Models
         [Column("description")]
         public string? Description { get => description; set => description = value; }
 
-        public TagAlias? Language { get => language; set => language = value; }
+        [Column("language")]
+        public string? Language { get => language; set => language = value; }
 
         [JsonIgnore]
         [ForeignKey("NoteId")]

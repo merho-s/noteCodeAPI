@@ -6,8 +6,10 @@ namespace noteCodeAPI.Repositories
 {
     public class CodetagRepository : BaseRepository<Codetag>
     {
-        public CodetagRepository(DataDbContext dbContext) : base(dbContext)
+        private TagAliasRepository _tagRepos;
+        public CodetagRepository(DataDbContext dbContext, TagAliasRepository tagRepos) : base(dbContext)
         {
+            _tagRepos = tagRepos;
         }
 
         public override bool Delete(Codetag element)
@@ -35,9 +37,9 @@ namespace noteCodeAPI.Repositories
             return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
         }
 
-        public Codetag GetByAlias(TagAlias alias)
+        public Codetag GetByAliasName(string alias)
         {
-            return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Aliases.Contains(alias));
+            return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Aliases.Contains(_tagRepos.GetAliasByName(alias)));
         }
     }
 }

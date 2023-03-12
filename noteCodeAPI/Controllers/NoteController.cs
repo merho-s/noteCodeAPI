@@ -87,7 +87,7 @@ namespace noteCodeAPI.Controllers
             }
         }
 
-        [Authorize("admin")]
+        //[Authorize("admin")]
         [HttpGet("testget")]
         public IActionResult GetAllNotes()
         {

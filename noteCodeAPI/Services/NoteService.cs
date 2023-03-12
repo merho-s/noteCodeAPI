@@ -25,17 +25,17 @@ namespace noteCodeAPI.Services
             _userService = userService;
         }
 
-        public TagAlias GetAlias(string tag)
+        public string GetAlias(string tag)
         {
             TagAlias alias = _tagAliasRepos.GetAliasByName(tag.ToLower());
             if (alias != null)
             {
-                return alias;
+                return alias.Name;
             }
             Codetag codetag = _codetagRepos.GetAll().FirstOrDefault(t => t.Name.ToLower() == tag.ToLower());
             if (codetag != null)
             {
-                return _tagAliasRepos.GetAliasByTagId(codetag.Id);
+                return _tagAliasRepos.GetAliasByTagId(codetag.Id).Name;
             }
             throw new TagsDontExistException();
         }
@@ -54,20 +54,25 @@ namespace noteCodeAPI.Services
                     User = loggedUser,
                     Codes = noteRequest.Codes.Select(el => new CodeSnippet() { Code = el.Code, Description = el.Description, Language = GetAlias(el.Language) }).ToList()
                 };
-                newNote.Codes.ForEach(c => newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = _codetagRepos.GetByAlias(c.Language) }));
+                //newNote.Codes.ForEach(c => newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = _codetagRepos.GetByAliasName(c.Language) }));
 
                 if (noteRequest.Codetags != null)
                 {
                     noteRequest.Codetags.ForEach(t =>
                     {
                         NotesTags newCodetag = new() { Note = newNote, Tag = _codetagRepos.GetByName(t.Name) };
-                        if (newCodetag == null)
-                        {
-                            throw new TagsDontExistException();
-                        } else if (!newNote.Codetags.Contains(newCodetag))
+                        if (newCodetag != null)
                         {
                             newNote.Codetags.Add(newCodetag);
                         }
+                        else throw new TagsDontExistException();
+                        //if (newCodetag == null)
+                        //{
+                        //    throw new TagsDontExistException();
+                        //} else if (!newNote.Codetags.Contains(newCodetag))
+                        //{
+                        //    newNote.Codetags.Add(newCodetag);
+                        //}
                     });   
                 }
                 else throw new TagsDontExistException();
@@ -96,7 +101,7 @@ namespace noteCodeAPI.Services
                         Id = newNote.Id,
                         Title = newNote.Title,
                         Description = newNote.Description,
-                        Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language.Name }).ToList(),
+                        Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = newNote.Codetags.Select(el => new CodetagDTO() { Name = el.Tag.Name}).ToList()
                     //Image = newNote.Image
                 };
@@ -136,7 +141,7 @@ namespace noteCodeAPI.Services
                         Id = n.Id,
                         Title = n.Title,
                         Description = n.Description,
-                        Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language.Name }).ToList(),
+                        Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = n.Codetags.Select(el =>
                         {
                             Codetag codetag = _codetagRepos.GetById(el.TagId);
@@ -167,7 +172,7 @@ namespace noteCodeAPI.Services
                         Id = singleNote.Id,
                         Title = singleNote.Title,
                         Description = singleNote.Description,
-                        Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language.Name }).ToList(),
+                        Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = singleNote.Codetags.Select(el =>
                         {
                             Codetag codetag = _codetagRepos.GetById(el.TagId);
@@ -197,7 +202,7 @@ namespace noteCodeAPI.Services
                     Id = n.Id,
                     Title = n.Title,
                     Description = n.Description,
-                    Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language.Name }).ToList(),
+                    Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                     Codetags = n.Codetags.Select(el =>
                     {
                         Codetag codetag = _codetagRepos.GetById(el.TagId);

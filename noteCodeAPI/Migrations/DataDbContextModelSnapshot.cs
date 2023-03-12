@@ -39,20 +39,24 @@ namespace noteCodeAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("description");
 
-                    b.Property<int?>("LanguageId")
-                        .HasColumnType("int");
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("language");
 
                     b.Property<int>("NoteId")
                         .HasColumnType("int")
                         .HasColumnName("note_id");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("TagAliasId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("LanguageId");
+                    b.HasKey("Id");
 
                     b.HasIndex("NoteId");
 
-                    b.ToTable("code_snippet", (string)null);
+                    b.HasIndex("TagAliasId");
+
+                    b.ToTable("code_snippet");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
@@ -70,7 +74,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("codetag", (string)null);
+                    b.ToTable("codetag");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
@@ -98,7 +102,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("note", (string)null);
+                    b.ToTable("note");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.NotesTags", b =>
@@ -124,7 +128,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("notes_tags", (string)null);
+                    b.ToTable("notes_tags");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
@@ -149,7 +153,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasIndex("CodetagId");
 
-                    b.ToTable("codetag_alias", (string)null);
+                    b.ToTable("codetag_alias");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UnusedActiveToken", b =>
@@ -172,7 +176,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("unused_active_token", (string)null);
+                    b.ToTable("unused_active_token");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>
@@ -198,22 +202,20 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.CodeSnippet", b =>
                 {
-                    b.HasOne("noteCodeAPI.Models.TagAlias", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId");
-
                     b.HasOne("noteCodeAPI.Models.Note", "Note")
                         .WithMany("Codes")
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Language");
+                    b.HasOne("noteCodeAPI.Models.TagAlias", null)
+                        .WithMany("Codes")
+                        .HasForeignKey("TagAliasId");
 
                     b.Navigation("Note");
                 });
@@ -269,6 +271,11 @@ namespace noteCodeAPI.Migrations
                     b.Navigation("Codes");
 
                     b.Navigation("Codetags");
+                });
+
+            modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
+                {
+                    b.Navigation("Codes");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>
