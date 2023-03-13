@@ -47,14 +47,9 @@ namespace noteCodeAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("note_id");
 
-                    b.Property<int?>("TagAliasId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NoteId");
-
-                    b.HasIndex("TagAliasId");
 
                     b.ToTable("code_snippet");
                 });
@@ -213,10 +208,6 @@ namespace noteCodeAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("noteCodeAPI.Models.TagAlias", null)
-                        .WithMany("Codes")
-                        .HasForeignKey("TagAliasId");
-
                     b.Navigation("Note");
                 });
 
@@ -271,11 +262,6 @@ namespace noteCodeAPI.Migrations
                     b.Navigation("Codes");
 
                     b.Navigation("Codetags");
-                });
-
-            modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
-                {
-                    b.Navigation("Codes");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>

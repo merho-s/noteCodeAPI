@@ -54,25 +54,21 @@ namespace noteCodeAPI.Services
                     User = loggedUser,
                     Codes = noteRequest.Codes.Select(el => new CodeSnippet() { Code = el.Code, Description = el.Description, Language = GetAlias(el.Language) }).ToList()
                 };
-                //newNote.Codes.ForEach(c => newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = _codetagRepos.GetByAliasName(c.Language) }));
+                newNote.Codes.ForEach(c => newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = _codetagRepos.GetByAliasName(c.Language) }));
 
                 if (noteRequest.Codetags != null)
                 {
                     noteRequest.Codetags.ForEach(t =>
                     {
                         NotesTags newCodetag = new() { Note = newNote, Tag = _codetagRepos.GetByName(t.Name) };
-                        if (newCodetag != null)
+                        if (newCodetag == null)
+                        {
+                            throw new TagsDontExistException();
+                        }
+                        else if (!newNote.Codetags.Contains(newCodetag))
                         {
                             newNote.Codetags.Add(newCodetag);
                         }
-                        else throw new TagsDontExistException();
-                        //if (newCodetag == null)
-                        //{
-                        //    throw new TagsDontExistException();
-                        //} else if (!newNote.Codetags.Contains(newCodetag))
-                        //{
-                        //    newNote.Codetags.Add(newCodetag);
-                        //}
                     });   
                 }
                 else throw new TagsDontExistException();
@@ -103,7 +99,7 @@ namespace noteCodeAPI.Services
                         Description = newNote.Description,
                         Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = newNote.Codetags.Select(el => new CodetagDTO() { Name = el.Tag.Name}).ToList()
-                    //Image = newNote.Image
+                        //Image = newNote.Image
                 };
 
 

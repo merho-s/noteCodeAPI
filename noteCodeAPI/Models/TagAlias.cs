@@ -19,11 +19,5 @@ namespace noteCodeAPI.Models
         [Column("codetag_id")]
         public int CodetagId { get; set; }
 
-        public List<CodeSnippet> Codes { get; set; }
-
-        public TagAlias()
-        {
-            Codes = new();
-        }
     }
 }
