@@ -10,29 +10,29 @@ namespace noteCodeAPI.Repositories
         {
         }
 
-        public override bool Delete(UserApp element)
+        public override async Task<bool> DeleteAsync(UserApp element)
         {
             _dbContext.Users.Remove(element);
-            return Update();
+            return await UpdateAsync();
         }
 
-        public override List<UserApp> GetAll()
+        public override async Task<List<UserApp>> GetAllAsync()
         {
             return _dbContext.Users.Include(u => u.Notes).ToList();
         }
 
-        public override UserApp? GetById(int id)
+        public override async Task<UserApp> GetByIdAsync(int id)
         {
             return _dbContext.Users.Include(u => u.Notes).FirstOrDefault(u => u.Id == id);
         }
 
-        public override bool Save(UserApp element)
+        public override async Task<bool> SaveAsync(UserApp element)
         {
             _dbContext.Users.Add(element);
-            return Update();
+            return await UpdateAsync();
         }
 
-        public UserApp SearchOne(Func<UserApp, bool> searchMethod)
+        public async Task<UserApp> SearchOneAsync(Func<UserApp, bool> searchMethod)
         {
             return _dbContext.Users.Include(u => u.Notes).FirstOrDefault(searchMethod);
         }

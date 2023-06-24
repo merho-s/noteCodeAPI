@@ -7,6 +7,7 @@ using noteCodeAPI.Repositories;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
+using System.Linq;
 
 namespace noteCodeAPI.Services
 {
@@ -25,17 +26,19 @@ namespace noteCodeAPI.Services
             _userService = userService;
         }
 
-        public string GetAlias(string tag)
+        public async Task<string> GetAliasAsync(string tag)
         {
-            TagAlias alias = _tagAliasRepos.GetAliasByName(tag.ToLower());
+            TagAlias alias = await _tagAliasRepos.GetAliasByNameAsync(tag);
             if (alias != null)
             {
                 return alias.Name;
             }
-            Codetag codetag = _codetagRepos.GetAll().FirstOrDefault(t => t.Name.ToLower() == tag.ToLower());
+            var allCodetags = await _codetagRepos.GetAllAsync();
+            var codetag = allCodetags.FirstOrDefault(t => t.Name.ToLower() == tag.ToLower());
             if (codetag != null)
             {
-                return _tagAliasRepos.GetAliasByTagId(codetag.Id).Name;
+                var tagAlias = await _tagAliasRepos.GetAliasByTagIdAsync(codetag.Id);
+                return tagAlias.Name;
             }
             throw new TagsDontExistException();
         }
@@ -47,20 +50,29 @@ namespace noteCodeAPI.Services
             if (loggedUser != null)
             {
                 List<CodeSnippet> newCodes = new();
+                var codes = noteRequest.Codes.ToAsyncEnumerable().SelectAwait(async el => new CodeSnippet() { Code = el.Code, Description = el.Description, Language = await GetAliasAsync(el.Language) }).ToListAsync();
                 Note newNote = new Note()
                 {
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
                     User = loggedUser,
-                    Codes = noteRequest.Codes.Select(el => new CodeSnippet() { Code = el.Code, Description = el.Description, Language = GetAlias(el.Language) }).ToList()
+                    Codes = noteRequest.Codes.ToAsyncEnumerable().SelectAwait(async el => new CodeSnippet() { Code = el.Code, Description = el.Description, Language = await GetAliasAsync(el.Language) }).ToListAsync()
                 };
-                newNote.Codes.ForEach(c => newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = _codetagRepos.GetByAliasName(c.Language) }));
+                foreach(var c in newNote.Codes)
+                {
+                    Codetag tag = _codetagRepos.GetByAliasNameAsync(c.Language).Result;
+                    if (tag != null)
+                    {
+                        newNote.Codetags.Add(tag);
+                    }
+                }
+                //newNote.Codes.ForEach(c => newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = _codetagRepos.GetByAliasName(c.Language) }));
 
                 if (noteRequest.Codetags != null)
                 {
-                    noteRequest.Codetags.ForEach(t =>
+                    foreach(var t in noteRequest.Codetags)
                     {
-                        NotesTags newCodetag = new() { Note = newNote, Tag = _codetagRepos.GetByName(t.Name) };
+                        Codetag newCodetag = _codetagRepos.GetByName(t.Name);
                         if (newCodetag == null)
                         {
                             throw new TagsDontExistException();
@@ -69,7 +81,7 @@ namespace noteCodeAPI.Services
                         {
                             newNote.Codetags.Add(newCodetag);
                         }
-                    });   
+                    }
                 }
                 else throw new TagsDontExistException();
 
@@ -98,7 +110,7 @@ namespace noteCodeAPI.Services
                         Title = newNote.Title,
                         Description = newNote.Description,
                         Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                        Codetags = newNote.Codetags.Select(el => new CodetagDTO() { Name = el.Tag.Name}).ToList()
+                        Codetags = newNote.Codetags.Select(el => new CodetagDTO() { Name = el.Name}).ToList()
                         //Image = newNote.Image
                 };
 
@@ -140,7 +152,7 @@ namespace noteCodeAPI.Services
                         Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = n.Codetags.Select(el =>
                         {
-                            Codetag codetag = _codetagRepos.GetById(el.TagId);
+                            Codetag codetag = _codetagRepos.GetById(el.Id);
                             if (codetag != null)
                             {
                                 return new CodetagDTO { Name = codetag.Name };
@@ -171,7 +183,7 @@ namespace noteCodeAPI.Services
                         Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = singleNote.Codetags.Select(el =>
                         {
-                            Codetag codetag = _codetagRepos.GetById(el.TagId);
+                            Codetag codetag = _codetagRepos.GetById(el.Id);
                             if (codetag != null)
                             {
                                 return new CodetagDTO { Name = codetag.Name };
@@ -201,7 +213,7 @@ namespace noteCodeAPI.Services
                     Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                     Codetags = n.Codetags.Select(el =>
                     {
-                        Codetag codetag = _codetagRepos.GetById(el.TagId);
+                        Codetag codetag = _codetagRepos.GetById(el.Id);
                         if (codetag != null)
                         {
                             return new CodetagDTO { Name = codetag.Name };

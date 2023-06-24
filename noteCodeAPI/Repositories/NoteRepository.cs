@@ -10,31 +10,31 @@ namespace noteCodeAPI.Repositories
         {
         }
 
-        public override bool Delete(Note element)
+        public override async Task<bool> DeleteAsync(Note element)
         {
             _dbContext.Notes.Remove(element);
-            return Update();
+            return await UpdateAsync();
         }
 
-        public override List<Note> GetAll()
+        public override async Task<List<Note>> GetAllAsync()
         {
             return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).ToList();        
         }
 
-        public override Note? GetById(int id)
+        public override async Task<Note> GetByIdAsync(int id)
         {
             return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).FirstOrDefault(n => n.Id == id);
         }
 
-        public List<Note> GetAllByUserId(int userId)
+        public async Task<List<Note>> GetAllByUserIdAsync(int userId)
         {
             return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).Where(n => n.User.Id == userId).ToList();
         }
 
-        public override bool Save(Note element)
+        public override async Task<bool> SaveAsync(Note element)
         {
             _dbContext.Notes.Add(element);
-            return Update();
+            return await UpdateAsync();
         }
     }
 }

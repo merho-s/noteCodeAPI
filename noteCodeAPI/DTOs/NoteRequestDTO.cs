@@ -8,16 +8,11 @@ namespace noteCodeAPI.DTOs
 
         public string Description { get; set; }
 
-        public List<CodeSnippetDTO> Codes { get; set; }
+        public ICollection<CodeSnippetDTO> Codes { get; set; }
 
         //public IFormFile Image { get; set; }
 
-        public List<CodetagDTO> Codetags { get; set; }
+        public ICollection<CodetagDTO> Codetags { get; set; }
 
-        public NoteRequestDTO() 
-        {
-            Codetags = new();
-            Codes = new();
-        }
     }
 }

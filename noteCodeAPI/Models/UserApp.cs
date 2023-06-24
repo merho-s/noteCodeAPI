@@ -10,7 +10,7 @@ namespace noteCodeAPI.Models
         private string? username;
         private string? password;
         private Role role;
-        private List<Note> notes;
+        private ICollection<Note> notes;
 
         [Column("id")]
         public int Id { get => id; set => id = value; }
@@ -24,10 +24,11 @@ namespace noteCodeAPI.Models
         [Column("role")]
         public Role Role { get => role; set => role = value; }
 
-        public List<Note> Notes { get => notes; set => notes = value; }
+        public ICollection<Note> Notes { get => notes; set => notes = value; }
+
         public UserApp() 
         {
-            Notes = new();
+            Notes = new List<Note>();
         }
     }
 }

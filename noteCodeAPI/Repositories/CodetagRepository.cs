@@ -12,34 +12,34 @@ namespace noteCodeAPI.Repositories
             _tagRepos = tagRepos;
         }
 
-        public override bool Delete(Codetag element)
+        public override async Task<bool> DeleteAsync(Codetag element)
         {
             throw new NotImplementedException();
         }
 
-        public override List<Codetag> GetAll()
+        public override async Task<List<Codetag>> GetAllAsync()
         {
             return _dbContext.Codetags.Include(t => t.Aliases).ToList();
         }
 
-        public override Codetag GetById(int id)
+        public override async Task<Codetag> GetByIdAsync(int id)
         {
             return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Id == id);
         }
 
-        public override bool Save(Codetag element)
+        public override async Task<bool> SaveAsync(Codetag element)
         {
             throw new NotImplementedException();
         }
 
-        public Codetag GetByName(string name)
+        public async Task<Codetag> GetByNameAsync(string name)
         {
             return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
         }
 
-        public Codetag GetByAliasName(string alias)
+        public async Task<Codetag> GetByAliasNameAsync(string alias)
         {
-            return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefault(t => t.Aliases.Contains(_tagRepos.GetAliasByName(alias)));
+            return _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefaultAsync(async t => t.Aliases.Contains(await _tagRepos.GetAliasByNameAsync(alias)));
         }
     }
 }

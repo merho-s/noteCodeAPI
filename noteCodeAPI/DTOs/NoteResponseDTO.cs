@@ -12,15 +12,9 @@ namespace noteCodeAPI.DTOs
 
         //public string Image { get; set; }
 
-        public List<CodeSnippetDTO> Codes { get; set; }
+        public ICollection<CodeSnippetDTO> Codes { get; set; }
 
-        public List<CodetagDTO> Codetags { get; set; }
-
-        public NoteResponseDTO() 
-        {
-            Codetags = new();
-            Codes = new();
-        }
+        public ICollection<CodetagDTO> Codetags { get; set; }
         
     }
 }

@@ -8,6 +8,7 @@ using noteCodeAPI.Services;
 using Swashbuckle.Swagger;
 using System.Reflection;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace noteCodeAPI.Controllers
 {

@@ -9,34 +9,34 @@ namespace noteCodeAPI.Repositories
         {
         }
 
-        public override bool Delete(TagAlias element)
+        public override async Task<bool> DeleteAsync(TagAlias element)
         {
             throw new NotImplementedException();
         }
 
-        public override List<TagAlias> GetAll()
+        public override async Task<List<TagAlias>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public override TagAlias GetById(int id)
+        public override async Task<TagAlias> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public override bool Save(TagAlias element)
+        public override async Task<bool> SaveAsync(TagAlias element)
         {
             throw new NotImplementedException();
         }
 
-        public TagAlias GetAliasByTagId(int tagId)
+        public async Task<TagAlias> GetAliasByTagIdAsync(int tagId)
         {
             return _dbContext.TagAliases.FirstOrDefault(a => a.CodetagId == tagId);
         }
 
-        public TagAlias GetAliasByName(string name)
+        public async Task<TagAlias> GetAliasByNameAsync(string name)
         {
-            return _dbContext.TagAliases.FirstOrDefault(a => a.Name == name);
+            return _dbContext.TagAliases.FirstOrDefault(a => a.Name == name.ToLower());
         }
     }
 }

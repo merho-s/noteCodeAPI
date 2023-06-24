@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\msadiki\\Documents\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {}
+    "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\msadiki\\Documents\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {
+    "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\msadiki\\Documents\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
+        "projectUniqueName": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
         "projectName": "noteCodeAPI",
-        "projectPath": "C:\\Users\\msadiki\\Documents\\Travaux\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
-        "packagesPath": "C:\\Users\\msadiki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\msadiki\\Documents\\Travaux\\noteCodeAPI\\noteCodeAPI\\obj\\",
+        "projectPath": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
+        "packagesPath": "C:\\Users\\mouss\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\msadiki\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mouss\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -75,6 +75,10 @@
             "Swashbuckle.Core": {
               "target": "Package",
               "version": "[5.6.0, )"
+            },
+            "System.Linq.Async": {
+              "target": "Package",
+              "version": "[6.0.1, )"
             }
           },
           "imports": [
@@ -96,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     }

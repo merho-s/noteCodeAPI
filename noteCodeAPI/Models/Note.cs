@@ -10,8 +10,8 @@ namespace noteCodeAPI.Models
         private string? title;
         private string? description;
         //private string? image;
-        private List<CodeSnippet>? codes;
-        private List<NotesTags>? codetags;
+        private ICollection<CodeSnippet>? codes;
+        private ICollection<Codetag>? codetags;
         private UserApp? user;
 
         [Column("id")]
@@ -26,9 +26,9 @@ namespace noteCodeAPI.Models
         //[Column("image")]
         //public string? Image { get => image; set => image = value; }
 
-        public List<NotesTags>? Codetags { get => codetags; set => codetags = value; }
+        public ICollection<Codetag>? Codetags { get => codetags; set => codetags = value; }
 
-        public List<CodeSnippet>? Codes { get => codes; set => codes = value; }
+        public ICollection<CodeSnippet>? Codes { get => codes; set => codes = value; }
 
         [JsonIgnore]
         [ForeignKey("UserId")]
@@ -39,8 +39,8 @@ namespace noteCodeAPI.Models
 
         public Note()
         {
-            Codetags = new();
-            Codes = new();
+            Codetags = new List<Codetag>();
+            Codes = new List<CodeSnippet>();
         }
     }
 }

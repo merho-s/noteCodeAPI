@@ -22,6 +22,21 @@ namespace noteCodeAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CodetagNote", b =>
+                {
+                    b.Property<int>("CodetagsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NotesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CodetagsId", "NotesId");
+
+                    b.HasIndex("NotesId");
+
+                    b.ToTable("NotesTags", (string)null);
+                });
+
             modelBuilder.Entity("noteCodeAPI.Models.CodeSnippet", b =>
                 {
                     b.Property<int>("Id")
@@ -100,32 +115,6 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("note");
                 });
 
-            modelBuilder.Entity("noteCodeAPI.Models.NotesTags", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("NoteId")
-                        .HasColumnType("int")
-                        .HasColumnName("note_id");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int")
-                        .HasColumnName("tag_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NoteId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("notes_tags");
-                });
-
             modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
                 {
                     b.Property<int>("Id")
@@ -200,6 +189,21 @@ namespace noteCodeAPI.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("CodetagNote", b =>
+                {
+                    b.HasOne("noteCodeAPI.Models.Codetag", null)
+                        .WithMany()
+                        .HasForeignKey("CodetagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("noteCodeAPI.Models.Note", null)
+                        .WithMany()
+                        .HasForeignKey("NotesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("noteCodeAPI.Models.CodeSnippet", b =>
                 {
                     b.HasOne("noteCodeAPI.Models.Note", "Note")
@@ -220,25 +224,6 @@ namespace noteCodeAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("noteCodeAPI.Models.NotesTags", b =>
-                {
-                    b.HasOne("noteCodeAPI.Models.Note", "Note")
-                        .WithMany("Codetags")
-                        .HasForeignKey("NoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("noteCodeAPI.Models.Codetag", "Tag")
-                        .WithMany("Notes")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Note");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
                 {
                     b.HasOne("noteCodeAPI.Models.Codetag", "Codetag")
@@ -253,15 +238,11 @@ namespace noteCodeAPI.Migrations
             modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
                 {
                     b.Navigation("Aliases");
-
-                    b.Navigation("Notes");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
                 {
                     b.Navigation("Codes");
-
-                    b.Navigation("Codetags");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>

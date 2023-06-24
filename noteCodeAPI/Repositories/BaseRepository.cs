@@ -11,13 +11,13 @@ namespace noteCodeAPI.Repositories
             _dbContext = dbContext;
         }
 
-        public abstract bool Save(T element);
-        public abstract bool Delete(T element);
-        public abstract T GetById(int id);
-        public abstract List<T> GetAll();
-        public bool Update()
+        public abstract Task<bool> SaveAsync(T element);
+        public abstract Task<bool> DeleteAsync(T element);
+        public abstract Task<T> GetByIdAsync(int id);
+        public abstract Task<List<T>> GetAllAsync();
+        public async Task<bool> UpdateAsync()
         {
-            return _dbContext.SaveChanges() > 0;
+            return await _dbContext.SaveChangesAsync() > 0;
         }
     }
 }
