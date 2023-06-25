@@ -43,24 +43,24 @@ namespace noteCodeAPI.Services
             throw new TagsDontExistException();
         }
 
-        public NoteResponseDTO AddNote(NoteRequestDTO noteRequest/*, IFormFile imageFile*/)
+        public async Task<NoteResponseDTO> AddNoteAsync(NoteRequestDTO noteRequest/*, IFormFile imageFile*/)
         {
             UserApp loggedUser = _userService.GetLoggedUser();
             
             if (loggedUser != null)
             {
                 List<CodeSnippet> newCodes = new();
-                var codes = noteRequest.Codes.ToAsyncEnumerable().SelectAwait(async el => new CodeSnippet() { Code = el.Code, Description = el.Description, Language = await GetAliasAsync(el.Language) }).ToListAsync();
                 Note newNote = new Note()
                 {
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
                     User = loggedUser,
-                    Codes = noteRequest.Codes.ToAsyncEnumerable().SelectAwait(async el => new CodeSnippet() { Code = el.Code, Description = el.Description, Language = await GetAliasAsync(el.Language) }).ToListAsync()
+                    Codes = await Task.WhenAll(noteRequest.Codes.Select(async c => new CodeSnippet() { Code = c.Code, Description = c.Description, Language = await GetAliasAsync(c.Language) })),
                 };
+
                 foreach(var c in newNote.Codes)
                 {
-                    Codetag tag = _codetagRepos.GetByAliasNameAsync(c.Language).Result;
+                    Codetag tag = await _codetagRepos.GetByAliasNameAsync(c.Language);
                     if (tag != null)
                     {
                         newNote.Codetags.Add(tag);
