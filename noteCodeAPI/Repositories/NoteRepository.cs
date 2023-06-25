@@ -18,12 +18,12 @@ namespace noteCodeAPI.Repositories
 
         public override async Task<List<Note>> GetAllAsync()
         {
-            return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).ToList();        
+            return await _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).ToListAsync();        
         }
 
         public override async Task<Note> GetByIdAsync(int id)
         {
-            return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).FirstOrDefault(n => n.Id == id);
+            return await _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).FirstOrDefaultAsync(n => n.Id == id);
         }
 
         public async Task<List<Note>> GetAllByUserIdAsync(int userId)

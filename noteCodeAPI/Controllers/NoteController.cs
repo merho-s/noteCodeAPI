@@ -26,11 +26,11 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult PostNote([FromBody] NoteRequestDTO noteRequest/*, [FromForm] IFormFile imageFile*/)
+        public async Task<IActionResult> PostNoteAsync([FromBody] NoteRequestDTO noteRequest/*, [FromForm] IFormFile imageFile*/)
         {
             try
             {
-                NoteResponseDTO noteResponse = _noteService.AddNote(noteRequest);
+                NoteResponseDTO noteResponse = await _noteService.AddNoteAsync(noteRequest);
                 return Ok(noteResponse);
             } 
             catch (NotLoggedUserException ex)
@@ -57,11 +57,11 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetNotes()
+        public async Task<IActionResult> GetNotesAsync()
         {
             try
             {
-                List<NoteResponseDTO> notesResponse = _noteService.GetNotesList();
+                List<NoteResponseDTO> notesResponse = await _noteService.GetNotesListAsync();
                 return Ok(notesResponse);
             }
             catch (NotLoggedUserException ex)
@@ -72,11 +72,11 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public IActionResult GetNoteById(int id)
+        public async Task<IActionResult> GetNoteByIdAsync(int id)
         {
             try
             {
-                return Ok(_noteService.GetSingleNote(id));
+                return Ok(await _noteService.GetSingleNoteAsync(id));
             }
             catch (DatabaseException ex)
             {
@@ -90,9 +90,9 @@ namespace noteCodeAPI.Controllers
 
         //[Authorize("admin")]
         [HttpGet("testget")]
-        public IActionResult GetAllNotes()
+        public async Task<IActionResult> GetAllNotesAsync()
         {
-            return Ok(_noteService.GetAllNotesTest());  
+            return Ok(await _noteService.GetAllNotesTestAsync());  
         }
     }
 }

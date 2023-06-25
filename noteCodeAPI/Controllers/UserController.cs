@@ -19,11 +19,11 @@ namespace noteCodeAPI.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromForm] string username, [FromForm] string password)
+        public async Task<IActionResult> LoginAsync([FromForm] string username, [FromForm] string password)
         {
             try
             {
-                return Ok(_loginService.Login(username, password));
+                return Ok(await _loginService.LoginAsync(username, password));
             }
             catch (AuthenticationException ex)
             {
@@ -32,11 +32,11 @@ namespace noteCodeAPI.Controllers
         }
 
         [HttpPost("bantoken")]
-        public IActionResult BanToken()
+        public async Task<IActionResult> BanTokenAsync()
         {
             try
             {
-                return Ok("This token is out of usage: " + _userService.BanCurrentToken());
+                return Ok("This token is out of usage: " + await _userService.BanCurrentTokenAsync());
             }
             catch (NotLoggedUserException ex)
             {

@@ -1,4 +1,5 @@
-﻿using noteCodeAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using noteCodeAPI.Models;
 using noteCodeAPI.Tools;
 
 namespace noteCodeAPI.Repositories
@@ -17,12 +18,12 @@ namespace noteCodeAPI.Repositories
 
         public override async Task<List<UnusedActiveToken>> GetAllAsync()
         {
-            return _dbContext.UnusedActiveTokens.ToList();
+            return await _dbContext.UnusedActiveTokens.ToListAsync();
         }
 
         public override async Task<UnusedActiveToken> GetByIdAsync(int id)
         {
-            return _dbContext.UnusedActiveTokens.FirstOrDefault(t => t.Id == id);
+            return await _dbContext.UnusedActiveTokens.FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public override async Task<bool> SaveAsync(UnusedActiveToken element)

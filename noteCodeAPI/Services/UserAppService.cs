@@ -25,13 +25,13 @@ namespace noteCodeAPI.Services
             _unusedTokenRepos = unusedTokenRepos;
         }
 
-        public UserApp GetLoggedUser()
+        public async Task<UserApp> GetLoggedUserAsync()
         {
             try
             {
                 var userClaims = _httpContextAccessor.HttpContext.User.Claims;
                 string? username = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-                return _userRepos.SearchOne(u => u.Username == username);
+                return await _userRepos.SearchOneAsync(u => u.Username == username);
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace noteCodeAPI.Services
             };
         }
 
-        public IToken GetCurrentTokenInfos()
+        public async Task<IToken> GetCurrentTokenInfosAsync()
         {
             string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             if (token != null && token != "")
@@ -48,7 +48,7 @@ namespace noteCodeAPI.Services
                 Token tokenResponse = new()
                 {
                     JwtToken = token,
-                    User = GetLoggedUser(),
+                    User = await GetLoggedUserAsync(),
                     ExpirationDate = jwtToken.ValidTo
                 };
                 return tokenResponse;
@@ -56,9 +56,9 @@ namespace noteCodeAPI.Services
 
         }
 
-        public string BanCurrentToken()
+        public async Task<string> BanCurrentTokenAsync()
         {
-            Token currentToken = (Token)GetCurrentTokenInfos();
+            Token currentToken = (Token)await GetCurrentTokenInfosAsync();
             if (currentToken != null)
             {
                 UnusedActiveToken unusedActiveToken = new()
@@ -66,7 +66,7 @@ namespace noteCodeAPI.Services
                     JwtToken = currentToken.JwtToken,
                     ExpirationDate = currentToken.ExpirationDate
                 };
-                if (_unusedTokenRepos.Save(unusedActiveToken))
+                if (await _unusedTokenRepos.SaveAsync(unusedActiveToken))
                 {
                     return unusedActiveToken.JwtToken;
                 }

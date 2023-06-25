@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Management.SqlParser.SqlCodeDom;
 using noteCodeAPI.Models;
 using noteCodeAPI.Tools;
 
@@ -18,12 +19,12 @@ namespace noteCodeAPI.Repositories
 
         public override async Task<List<UserApp>> GetAllAsync()
         {
-            return _dbContext.Users.Include(u => u.Notes).ToList();
+            return await _dbContext.Users.Include(u => u.Notes).ToListAsync();
         }
 
         public override async Task<UserApp> GetByIdAsync(int id)
         {
-            return _dbContext.Users.Include(u => u.Notes).FirstOrDefault(u => u.Id == id);
+            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public override async Task<bool> SaveAsync(UserApp element)
@@ -34,7 +35,12 @@ namespace noteCodeAPI.Repositories
 
         public async Task<UserApp> SearchOneAsync(Func<UserApp, bool> searchMethod)
         {
-            return _dbContext.Users.Include(u => u.Notes).FirstOrDefault(searchMethod);
+            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => searchMethod(u));
+        }
+
+        public async Task<UserApp> SearchByIDs(string username, string password)
+        {
+            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
         }
     }
 }

@@ -24,7 +24,8 @@ namespace noteCodeAPI.Middlewares
             if (tokenResponse != null && tokenResponse != "")
             {
                 List<string> unusedTokens = new();
-                _unusedTokenRepos.GetAll().ForEach(t => unusedTokens.Add(t.JwtToken));
+                var allUnusedTokens = await _unusedTokenRepos.GetAllAsync();
+                allUnusedTokens.ForEach(t => unusedTokens.Add(t.JwtToken));
                 if (unusedTokens.Contains(tokenResponse))
                 {
                     context.Response.StatusCode = 401;

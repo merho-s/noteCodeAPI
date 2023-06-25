@@ -45,7 +45,7 @@ namespace noteCodeAPI.Services
 
         public async Task<NoteResponseDTO> AddNoteAsync(NoteRequestDTO noteRequest/*, IFormFile imageFile*/)
         {
-            UserApp loggedUser = _userService.GetLoggedUser();
+            UserApp loggedUser = await _userService.GetLoggedUserAsync();
             
             if (loggedUser != null)
             {
@@ -56,9 +56,12 @@ namespace noteCodeAPI.Services
                     Description = noteRequest.Description,
                     User = loggedUser,
                     Codes = await Task.WhenAll(noteRequest.Codes.Select(async c => new CodeSnippet() { Code = c.Code, Description = c.Description, Language = await GetAliasAsync(c.Language) })),
+                    Codetags = noteRequest.Codetags.Select(c => new Codetag() { Name = c.Name }).ToList()
                 };
 
-                foreach(var c in newNote.Codes)
+               // ADD LANGUAGE CODE TO TAGS (managed in front now)
+
+                /*foreach (var c in newNote.Codes)
                 {
                     Codetag tag = await _codetagRepos.GetByAliasNameAsync(c.Language);
                     if (tag != null)
@@ -66,11 +69,11 @@ namespace noteCodeAPI.Services
                         newNote.Codetags.Add(tag);
                     }
                 }
-                //newNote.Codes.ForEach(c => newNote.Codetags.Add(new NotesTags() { Note = newNote, Tag = _codetagRepos.GetByAliasName(c.Language) }));
+
 
                 if (noteRequest.Codetags != null)
                 {
-                    foreach(var t in noteRequest.Codetags)
+                    foreach (var t in noteRequest.Codetags)
                     {
                         Codetag newCodetag = _codetagRepos.GetByName(t.Name);
                         if (newCodetag == null)
@@ -83,9 +86,12 @@ namespace noteCodeAPI.Services
                         }
                     }
                 }
-                else throw new TagsDontExistException();
+                else throw new TagsDontExistException();*/
+
+
 
                 //Upload image
+
                 /*try
                 {
                     newNote.Image = UploadNoteImage(imageFile);
@@ -102,7 +108,7 @@ namespace noteCodeAPI.Services
                 }*/
 
 
-                if (_noteRepos.Save(newNote))
+                if (await _noteRepos.SaveAsync(newNote))
                 {
                     NoteResponseDTO noteResponse = new NoteResponseDTO()
                     {
@@ -111,7 +117,7 @@ namespace noteCodeAPI.Services
                         Description = newNote.Description,
                         Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = newNote.Codetags.Select(el => new CodetagDTO() { Name = el.Name}).ToList()
-                        //Image = newNote.Image
+
                 };
 
 
@@ -124,25 +130,26 @@ namespace noteCodeAPI.Services
             
         }
 
-        public string UploadNoteImage(IFormFile imageFile)
-        {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "assets", imageFile.FileName);
-            FileStream fileStream = new(filePath, FileMode.Create);
-            imageFile.CopyTo(fileStream);
-            fileStream.Close();
-            if (filePath != null && imageFile != null)
-            {
-                return filePath;
-            } else return null;
-        }
+        //public string UploadNoteImage(IFormFile imageFile)
+        //{
+        //    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "assets", imageFile.FileName);
+        //    FileStream fileStream = new(filePath, FileMode.Create);
+        //    imageFile.CopyTo(fileStream);
+        //    fileStream.Close();
+        //    if (filePath != null && imageFile != null)
+        //    {
+        //        return filePath;
+        //    } else return null;
+        //}
 
-        public List<NoteResponseDTO> GetNotesList() 
+        public async Task<List<NoteResponseDTO>> GetNotesListAsync() 
         {
-            UserApp loggedUser = _userService.GetLoggedUser();
+            UserApp loggedUser = await _userService.GetLoggedUserAsync();
             if (loggedUser != null)
             {
                 List<NoteResponseDTO> notesResponseList = new();
-                _noteRepos.GetAllByUserId(loggedUser.Id).ForEach(n =>
+                var userNotes = await _noteRepos.GetAllByUserIdAsync(loggedUser.Id);
+                foreach(var n in userNotes)
                 {
                     NoteResponseDTO noteResponse = new()
                     {
@@ -150,27 +157,27 @@ namespace noteCodeAPI.Services
                         Title = n.Title,
                         Description = n.Description,
                         Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                        Codetags = n.Codetags.Select(el =>
+                        Codetags = await Task.WhenAll(n.Codetags.Select(async el =>
                         {
-                            Codetag codetag = _codetagRepos.GetById(el.Id);
+                            Codetag codetag = await _codetagRepos.GetByIdAsync(el.Id);
                             if (codetag != null)
                             {
                                 return new CodetagDTO { Name = codetag.Name };
                             }
                             throw new TagsDontExistException();
-                        }).ToList()
+                        }))
                     };
 
                     notesResponseList.Add(noteResponse);
-                });
+                }
                 return notesResponseList;
             } throw new NotLoggedUserException();
         }
 
-        public NoteResponseDTO GetSingleNote(int id)
+        public async Task<NoteResponseDTO> GetSingleNoteAsync(int id)
         {
-            UserApp loggedUser = _userService.GetLoggedUser();
-            Note singleNote = _noteRepos.GetById(id);
+            UserApp loggedUser = await _userService.GetLoggedUserAsync();
+            Note singleNote = await _noteRepos.GetByIdAsync(id);
             if(singleNote != null)
             {
                 if (singleNote.User == loggedUser)
@@ -181,15 +188,15 @@ namespace noteCodeAPI.Services
                         Title = singleNote.Title,
                         Description = singleNote.Description,
                         Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                        Codetags = singleNote.Codetags.Select(el =>
+                        Codetags = await Task.WhenAll(singleNote.Codetags.Select(async el =>
                         {
-                            Codetag codetag = _codetagRepos.GetById(el.Id);
+                            Codetag codetag = await _codetagRepos.GetByIdAsync(el.Id);
                             if (codetag != null)
                             {
                                 return new CodetagDTO { Name = codetag.Name };
                             }
                             throw new TagsDontExistException();
-                        }).ToList()
+                        }))
                         //Image = singleNote.Image,
                     };
                     
@@ -199,11 +206,12 @@ namespace noteCodeAPI.Services
             } else throw new DatabaseException("This note dosen't exist.");
         }
 
-        public List<NoteResponseDTO> GetAllNotesTest()
+        public async Task<List<NoteResponseDTO>> GetAllNotesTestAsync()
         {
             List<NoteResponseDTO> notesResponseList = new();
-            
-            _noteRepos.GetAll().ForEach(n =>
+
+            var allNotes = await _noteRepos.GetAllAsync();
+            foreach(var n in allNotes)
             {
                 NoteResponseDTO noteResponse = new()
                 {
@@ -211,20 +219,20 @@ namespace noteCodeAPI.Services
                     Title = n.Title,
                     Description = n.Description,
                     Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                    Codetags = n.Codetags.Select(el =>
+                    Codetags = await Task.WhenAll(n.Codetags.Select(async el =>
                     {
-                        Codetag codetag = _codetagRepos.GetById(el.Id);
+                        Codetag codetag = await _codetagRepos.GetByIdAsync(el.Id);
                         if (codetag != null)
                         {
                             return new CodetagDTO { Name = codetag.Name };
                         }
                         throw new TagsDontExistException();
-                    }).ToList()
+                    }))
                     //Image = n.Image
                 };
 
                 notesResponseList.Add(noteResponse);
-            });
+            }
             return notesResponseList;
         }
     }

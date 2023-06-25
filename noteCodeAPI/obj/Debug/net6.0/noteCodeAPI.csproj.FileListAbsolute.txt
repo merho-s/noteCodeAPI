@@ -358,3 +358,4 @@ C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\staticweb
 C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.noteCodeAPI.props
 C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.noteCodeAPI.props
 C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\staticwebassets.pack.json
+D:\Users\ASUS\Documents\_DEV\Travaux\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\System.Linq.Async.dll

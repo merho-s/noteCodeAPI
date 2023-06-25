@@ -18,9 +18,9 @@ namespace noteCodeAPI.Services
         {
             _userRepos = userRepos;
         }
-        public LoginResponseDTO Login(string username, string password)
+        public async Task<LoginResponseDTO> LoginAsync(string username, string password)
         {
-            UserApp user = _userRepos.SearchOne(u => u.Username == username && u.Password == password);
+            UserApp user = await _userRepos.SearchByIDs(username, password);
             if (user != null)
             {
                 //Créer le token 

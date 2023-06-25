@@ -1,4 +1,5 @@
-﻿using noteCodeAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using noteCodeAPI.Models;
 using noteCodeAPI.Tools;
 
 namespace noteCodeAPI.Repositories
@@ -31,12 +32,12 @@ namespace noteCodeAPI.Repositories
 
         public async Task<TagAlias> GetAliasByTagIdAsync(int tagId)
         {
-            return _dbContext.TagAliases.FirstOrDefault(a => a.CodetagId == tagId);
+            return await _dbContext.TagAliases.FirstOrDefaultAsync(a => a.CodetagId == tagId);
         }
 
         public async Task<TagAlias> GetAliasByNameAsync(string name)
         {
-            return _dbContext.TagAliases.FirstOrDefault(a => a.Name == name.ToLower());
+            return await _dbContext.TagAliases.FirstOrDefaultAsync(a => a.Name == name.ToLower());
         }
     }
 }
