@@ -56,26 +56,26 @@ namespace noteCodeAPI.Services
                     Description = noteRequest.Description,
                     User = loggedUser,
                     Codes = await Task.WhenAll(noteRequest.Codes.Select(async c => new CodeSnippet() { Code = c.Code, Description = c.Description, Language = await GetAliasAsync(c.Language) })),
-                    Codetags = noteRequest.Codetags.Select(c => new Codetag() { Name = c.Name }).ToList()
+                    //Codetags = noteRequest.Codetags.Select(c => new Codetag() { Name = c.Name }).ToList()
                 };
 
-               // ADD LANGUAGE CODE TO TAGS (managed in front now)
-
-                /*foreach (var c in newNote.Codes)
+                // ADD LANGUAGE CODE TO TAGS (managed in front now)
+/*
+                foreach (var c in newNote.Codes)
                 {
                     Codetag tag = await _codetagRepos.GetByAliasNameAsync(c.Language);
                     if (tag != null)
                     {
                         newNote.Codetags.Add(tag);
                     }
-                }
+                }*/
 
 
                 if (noteRequest.Codetags != null)
                 {
                     foreach (var t in noteRequest.Codetags)
                     {
-                        Codetag newCodetag = _codetagRepos.GetByName(t.Name);
+                        Codetag newCodetag = await _codetagRepos.GetByNameAsync(t.Name);
                         if (newCodetag == null)
                         {
                             throw new TagsDontExistException();
@@ -86,7 +86,7 @@ namespace noteCodeAPI.Services
                         }
                     }
                 }
-                else throw new TagsDontExistException();*/
+                else throw new TagsDontExistException();
 
 
 
