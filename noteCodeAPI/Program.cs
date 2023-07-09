@@ -54,19 +54,21 @@ builder.Services.AddCors(options =>
     });
 });
 string currentDirectory = Directory.GetCurrentDirectory();
+string localDBmdf = @$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30";
+string localDB = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=noteCodeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 builder.Services.AddDbContext<DataDbContext>(options =>
 
-    options.UseSqlServer(@$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30"),
-    ServiceLifetime.Singleton
+    options.UseSqlServer(localDB),
+    ServiceLifetime.Scoped
 );
-builder.Services.AddSingleton<NoteRepository>();
-builder.Services.AddSingleton<UserAppRepository>();
-builder.Services.AddSingleton<CodetagRepository>();
-builder.Services.AddSingleton<UnusedActiveTokenRepository>();
-builder.Services.AddSingleton<TagAliasRepository>();
-builder.Services.AddSingleton<ILogin, LoginJwtService>();
-builder.Services.AddSingleton<NoteService>();
-builder.Services.AddSingleton<UserAppService>();
+builder.Services.AddScoped<NoteRepository>();
+builder.Services.AddScoped<UserAppRepository>();
+builder.Services.AddScoped<CodetagRepository>();
+builder.Services.AddScoped<UnusedActiveTokenRepository>();
+builder.Services.AddScoped<TagAliasRepository>();
+builder.Services.AddScoped<ILogin, LoginJwtService>();
+builder.Services.AddScoped<NoteService>();
+builder.Services.AddScoped<UserAppService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(a =>

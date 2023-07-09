@@ -30,8 +30,8 @@ namespace noteCodeAPI.Services
             try
             {
                 var userClaims = _httpContextAccessor.HttpContext.User.Claims;
-                string? username = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-                return await _userRepos.SearchOneAsync(u => u.Username == username);
+                int userId = int.Parse(userClaims.FirstOrDefault(c => c.Type == "id").Value);
+                return await _userRepos.GetByIdAsync(userId);
             }
             catch (Exception ex)
             {

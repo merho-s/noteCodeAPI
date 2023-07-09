@@ -33,9 +33,9 @@ namespace noteCodeAPI.Repositories
             return await UpdateAsync();
         }
 
-        public async Task<UserApp> SearchOneAsync(Func<UserApp, bool> searchMethod)
+        public async Task<UserApp> SearchByNameAsync(string username)
         {
-            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => searchMethod(u));
+            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Username == username);
         }
 
         public async Task<UserApp> SearchByIDs(string username, string password)

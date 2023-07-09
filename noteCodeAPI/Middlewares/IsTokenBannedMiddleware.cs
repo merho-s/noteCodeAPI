@@ -7,24 +7,20 @@ namespace noteCodeAPI.Middlewares
     public class IsTokenBannedMiddleware
     {
         private readonly RequestDelegate _next;
-        private UnusedActiveTokenRepository _unusedTokenRepos;
-        private UserAppService _userService;
 
-        public IsTokenBannedMiddleware(RequestDelegate next, UnusedActiveTokenRepository unusedTokenRepos, UserAppService userService)
+        public IsTokenBannedMiddleware(RequestDelegate next)
         {
             _next = next;
-            _unusedTokenRepos = unusedTokenRepos;
-            _userService = userService;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, UnusedActiveTokenRepository unusedTokenRepos)
         {
             //Token tokenResponse = (Token)_userService.GetCurrentTokenInfos();
             string tokenResponse = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             if (tokenResponse != null && tokenResponse != "")
             {
                 List<string> unusedTokens = new();
-                var allUnusedTokens = await _unusedTokenRepos.GetAllAsync();
+                var allUnusedTokens = await unusedTokenRepos.GetAllAsync();
                 allUnusedTokens.ForEach(t => unusedTokens.Add(t.JwtToken));
                 if (unusedTokens.Contains(tokenResponse))
                 {

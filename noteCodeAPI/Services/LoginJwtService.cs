@@ -32,7 +32,8 @@ namespace noteCodeAPI.Services
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim(ClaimTypes.Name, user.Username),
-                        new Claim(ClaimTypes.Role, user.Role.ToString().ToLower())
+                        new Claim(ClaimTypes.Role, user.Role.ToString().ToLower()),
+                        new Claim("id", user.Id.ToString())
                     }),
                     Issuer = "sogeti",
                     Audience = "sogeti"
