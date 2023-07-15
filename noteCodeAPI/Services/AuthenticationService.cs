@@ -49,7 +49,8 @@ namespace noteCodeAPI.Services
                     {
                         Username = user.Username,
                         Token = jwtSecurityTokenHandler.WriteToken(securityToken),
-                        ExpirationDate = securityToken.ValidTo
+                        ExpirationDate = securityToken.ValidTo,
+                        Role = user.Role.ToString(),
                     };
                     return loginResponse;
                 }

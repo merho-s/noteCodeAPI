@@ -18,13 +18,15 @@ namespace noteCodeAPI.Services
         private IHttpContextAccessor? _httpContextAccessor;
         private UnusedActiveTokenRepository _unusedTokenRepos;
         private IPasswordHasher _passwordHasher;
+        private WaitingUserRepository _waitingUserRepos;
 
-        public UserAppService(UserAppRepository userRepos, IHttpContextAccessor httpContextAccessor, IAuthentication login, UnusedActiveTokenRepository unusedTokenRepos, IPasswordHasher passwordHasher)
+        public UserAppService(UserAppRepository userRepos, IHttpContextAccessor httpContextAccessor, IAuthentication login, UnusedActiveTokenRepository unusedTokenRepos, IPasswordHasher passwordHasher, WaitingUserRepository waitingUserRepos)
         {
             _userRepos = userRepos;
             _httpContextAccessor = httpContextAccessor;
             _unusedTokenRepos = unusedTokenRepos;
             _passwordHasher = passwordHasher;
+            _waitingUserRepos = waitingUserRepos;
         }
 
         public async Task<UserApp> GetLoggedUserAsync()
@@ -96,6 +98,49 @@ namespace noteCodeAPI.Services
                 else throw new DatabaseException();
             }
             else throw new SameUsernameException();
+        }
+
+        public async Task<bool> AddToWaitingUsersAsync(UserRequestDTO userRequest)
+        {
+            UserApp userFound = await _userRepos.SearchByNameAsync(userRequest.Username);
+            if (userFound == null)
+            {
+                string passwordSalt = _passwordHasher.GenerateSalt();
+                WaitingUser newUser = new()
+                {
+                    Username = userRequest.Username,
+                    PasswordSalt = passwordSalt,
+                    PasswordHashed = _passwordHasher.GenerateHashPassword(userRequest.Password, passwordSalt),
+                };
+                if (await _waitingUserRepos.SaveAsync(newUser))
+                {
+                    return true;
+                }
+                else throw new DatabaseException();
+            }
+            else throw new SameUsernameException();
+        }
+
+        public async Task<bool> WhitelistUserAsync(int userId)
+        {
+            var waitingUser = await _waitingUserRepos.GetByIdAsync(userId);
+            if(waitingUser != null)
+            {
+                UserApp newUser = new()
+                {
+                    Username = waitingUser.Username,
+                    PasswordSalt = waitingUser.PasswordSalt,
+                    PasswordHashed = waitingUser.PasswordHashed,
+                    Role = Role.User
+                };
+
+                if(await _userRepos.SaveAsync(newUser))
+                {
+                    await _waitingUserRepos.DeleteAsync(waitingUser);
+                    return true;
+                }
+            }
+            throw new DatabaseException();
         }
 
         public async Task<bool> EditLoggedUserAsync(UserRequestDTO userRequest)

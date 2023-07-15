@@ -66,6 +66,7 @@ builder.Services.AddScoped<UserAppRepository>();
 builder.Services.AddScoped<CodetagRepository>();
 builder.Services.AddScoped<UnusedActiveTokenRepository>();
 builder.Services.AddScoped<TagAliasRepository>();
+builder.Services.AddScoped<WaitingUserRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IAuthentication, AuthenticationService>();
 builder.Services.AddScoped<NoteService>();

@@ -81,5 +81,31 @@ namespace noteCodeAPI.Controllers
             }
         }
 
+        [HttpPost("requestaccess")]
+        public async Task<IActionResult> RequestAccessAsync(UserRequestDTO userRequest)
+        {
+            try
+            {
+                return Ok(await _userService.AddToWaitingUsersAsync(userRequest));
+            } catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        } 
+
+        [Authorize(Policy = "admin")]
+        [HttpPost("whitelist/{id}")]
+        public async Task<IActionResult> WhitelistUserAsync(int id)
+        {
+            try
+            {
+                return Ok(await _userService.WhitelistUserAsync(id));
+            } catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
     }
 }
