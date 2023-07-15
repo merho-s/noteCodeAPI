@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using noteCodeAPI.DTOs;
 using noteCodeAPI.Exceptions;
 using noteCodeAPI.Services;
 using noteCodeAPI.Services.Interfaces;
@@ -9,12 +11,12 @@ namespace noteCodeAPI.Controllers
     [Route("api/v1/user")]
     public class UserController : ControllerBase
     {
-        private ILogin _loginService;
+        private IAuthentication _AuthenticationService;
         private UserAppService _userService;
 
-        public UserController(ILogin loginService, UserAppService userService)
+        public UserController(IAuthentication AuthenticationService, UserAppService userService)
         {
-            _loginService = loginService;
+            _AuthenticationService = AuthenticationService;
             _userService = userService;
         }
 
@@ -23,9 +25,22 @@ namespace noteCodeAPI.Controllers
         {
             try
             {
-                return Ok(await _loginService.LoginAsync(username, password));
+                return Ok(await _AuthenticationService.LoginAsync(username, password));
             }
             catch (AuthenticationException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUpAsync([FromBody] UserRequestDTO userRequest)
+        {
+            try
+            {
+                return Ok(await _userService.SignUpAsync(userRequest)); 
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
@@ -38,7 +53,7 @@ namespace noteCodeAPI.Controllers
             {
                 return Ok("This token is out of usage: " + await _userService.BanCurrentTokenAsync());
             }
-            catch (NotLoggedUserException ex)
+            catch (NotFoundUserException ex)
             {
                 return StatusCode(500, ex.Message);
             }
@@ -48,7 +63,23 @@ namespace noteCodeAPI.Controllers
             }
         }
 
-
+        [Authorize]
+        [HttpPut("editme")]
+        public async Task<IActionResult> EditLoggedUserAsync(UserRequestDTO userRequest)
+        {
+            try
+            {
+                return Ok(await _userService.EditLoggedUserAsync(userRequest));
+            }
+            catch (NotFoundUserException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch (DatabaseException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
     }
 }

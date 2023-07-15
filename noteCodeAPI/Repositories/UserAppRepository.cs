@@ -35,12 +35,12 @@ namespace noteCodeAPI.Repositories
 
         public async Task<UserApp> SearchByNameAsync(string username)
         {
-            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Username == username);
+            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
         }
 
-        public async Task<UserApp> SearchByIDs(string username, string password)
+        public async Task<UserApp> SearchByIDsAsync(string username, string password)
         {
-            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Username == username && u.PasswordHashed == password);
         }
     }
 }

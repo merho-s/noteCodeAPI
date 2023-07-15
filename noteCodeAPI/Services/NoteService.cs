@@ -118,7 +118,7 @@ namespace noteCodeAPI.Services
                         Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = newNote.Codetags.Select(el => new CodetagDTO() { Name = el.Name}).ToList()
 
-                };
+                    };
 
 
                     return noteResponse;
@@ -126,7 +126,7 @@ namespace noteCodeAPI.Services
                 else throw new DatabaseException();
 
             }
-            else throw new NotLoggedUserException();
+            else throw new NotFoundUserException();
             
         }
 
@@ -171,7 +171,7 @@ namespace noteCodeAPI.Services
                     notesResponseList.Add(noteResponse);
                 }
                 return notesResponseList;
-            } throw new NotLoggedUserException();
+            } throw new NotFoundUserException();
         }
 
         public async Task<NoteResponseDTO> GetSingleNoteAsync(int id)
@@ -202,7 +202,7 @@ namespace noteCodeAPI.Services
                     
                     return noteResponse;
                 }
-                else throw new NotLoggedUserException("Actual logged user doesn't have access to this note because it's not his.");
+                else throw new NotFoundUserException("Actual logged user doesn't have access to this note because it's not his.");
             } else throw new DatabaseException("This note dosen't exist.");
         }
 

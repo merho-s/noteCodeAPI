@@ -8,7 +8,8 @@ namespace noteCodeAPI.Models
     {
         private int id;
         private string? username;
-        private string? password;
+        private string? passwordHashed;
+        private string? passwordSalt;
         private Role role;
         private ICollection<Note> notes;
 
@@ -16,10 +17,13 @@ namespace noteCodeAPI.Models
         public int Id { get => id; set => id = value; }
 
         [Column("username")]
-        public string? Username { get => username; set => username = value ?? throw new ArgumentNullException(nameof(value)); }
+        public string? Username { get => username; set => username = value; }
 
-        [Column("password")]
-        public string? Password { get => password; set => password = value ?? throw new ArgumentNullException(nameof(value)); }
+        [Column("password_hashed")]
+        public string? PasswordHashed { get => passwordHashed; set => passwordHashed = value; }
+
+        [Column("password_salt")]
+        public string? PasswordSalt { get => passwordSalt; set => passwordSalt = value; }
 
         [Column("role")]
         public Role Role { get => role; set => role = value; }
