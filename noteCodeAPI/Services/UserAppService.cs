@@ -1,5 +1,8 @@
 ﻿using Azure.Identity;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using noteCodeAPI.DTOs;
 using noteCodeAPI.Exceptions;
 using noteCodeAPI.Models;
@@ -19,6 +22,7 @@ namespace noteCodeAPI.Services
         private UnusedActiveTokenRepository _unusedTokenRepos;
         private IPasswordHasher _passwordHasher;
         private WaitingUserRepository _waitingUserRepos;
+ 
 
         public UserAppService(UserAppRepository userRepos, IHttpContextAccessor httpContextAccessor, IAuthentication login, UnusedActiveTokenRepository unusedTokenRepos, IPasswordHasher passwordHasher, WaitingUserRepository waitingUserRepos)
         {
@@ -60,7 +64,7 @@ namespace noteCodeAPI.Services
 
         }
 
-        public async Task<string> BanCurrentTokenAsync()
+        private async Task<string> BanCurrentTokenAsync()
         {
             Token currentToken = (Token)await GetCurrentTokenInfosAsync();
             if (currentToken != null)
@@ -100,6 +104,12 @@ namespace noteCodeAPI.Services
             else throw new SameUsernameException();
         }
 
+        public async Task SignOutAsync()
+        {
+            await BanCurrentTokenAsync();
+            _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+        }
+
         public async Task<bool> AddToWaitingUsersAsync(UserRequestDTO userRequest)
         {
             UserApp userFound = await _userRepos.SearchByNameAsync(userRequest.Username);
@@ -121,6 +131,10 @@ namespace noteCodeAPI.Services
             else throw new SameUsernameException();
         }
 
+        public async Task<List<WaitingUser>> GetAllWaitingUsersAsync()
+        {
+            return await _waitingUserRepos.GetAllAsync();
+        }
         public async Task<bool> WhitelistUserAsync(int userId)
         {
             var waitingUser = await _waitingUserRepos.GetByIdAsync(userId);
@@ -133,7 +147,7 @@ namespace noteCodeAPI.Services
                     PasswordHashed = waitingUser.PasswordHashed,
                     Role = Role.User
                 };
-
+              
                 if(await _userRepos.SaveAsync(newUser))
                 {
                     await _waitingUserRepos.DeleteAsync(waitingUser);

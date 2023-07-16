@@ -36,22 +36,22 @@ namespace noteCodeAPI.Controllers
             catch (NotFoundUserException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, ex.Message);
             }
             catch (TagsDontExistException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500,ex.Message);
             }
             catch (UploadException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, ex.Message);
             }
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -66,7 +66,7 @@ namespace noteCodeAPI.Controllers
             }
             catch (NotFoundUserException ex)
             { 
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500,ex.Message);
             }
         }
 
@@ -80,16 +80,30 @@ namespace noteCodeAPI.Controllers
             }
             catch (DatabaseException ex)
             {
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, ex.Message);
             }
             catch (NotFoundUserException ex)
             {
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, ex.Message);
             }
         }
 
-        //[Authorize("admin")]
-        [HttpGet("testget")]
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMyNoteAsync(int id)
+        {
+            try
+            {
+                return Ok(await _noteService.DeleteMyNoteAsync(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize("admin")]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllNotesAsync()
         {
             return Ok(await _noteService.GetAllNotesTestAsync());  

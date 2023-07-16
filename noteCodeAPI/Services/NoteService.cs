@@ -130,6 +130,21 @@ namespace noteCodeAPI.Services
             
         }
 
+        public async Task<bool> DeleteMyNoteAsync(int noteId)
+        {
+            var noteToDelete = await _noteRepos.GetByIdAsync(noteId);
+            if(noteToDelete != null)
+            {
+                var userLogged = await _userService.GetLoggedUserAsync();
+                var userNotes = await _noteRepos.GetAllByUserIdAsync(userLogged.Id);
+                if (userNotes.Contains(noteToDelete))
+                {
+                    if (await _noteRepos.DeleteAsync(noteToDelete))
+                        return true;
+                }
+            }
+            throw new DatabaseException();
+        }
         //public string UploadNoteImage(IFormFile imageFile)
         //{
         //    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "assets", imageFile.FileName);

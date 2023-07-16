@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using noteCodeAPI.Middlewares;
+using noteCodeAPI.Models;
 using noteCodeAPI.Repositories;
 using noteCodeAPI.Services;
 using noteCodeAPI.Services.Interfaces;
@@ -87,7 +88,7 @@ builder.Services.AddAuthentication(a =>
     ValidAudience = "sogeti",
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")),
 
-});
+}).AddCookie();
 builder.Services.AddAuthorization((builder) =>
 {
     builder.AddPolicy("admin", options =>
