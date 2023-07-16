@@ -57,11 +57,11 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetNotesAsync()
+        public async Task<IActionResult> GetUserNotesAsync()
         {
             try
             {
-                List<NoteResponseDTO> notesResponse = await _noteService.GetNotesListAsync();
+                List<NoteResponseDTO> notesResponse = await _noteService.GetUserNotesAsync();
                 return Ok(notesResponse);
             }
             catch (NotFoundUserException ex)
@@ -72,11 +72,11 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetNoteByIdAsync(int id)
+        public async Task<IActionResult> GetUserNoteByIdAsync(int id)
         {
             try
             {
-                return Ok(await _noteService.GetSingleNoteAsync(id));
+                return Ok(await _noteService.GetSingleUserNoteAsync(id));
             }
             catch (DatabaseException ex)
             {
@@ -90,23 +90,16 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMyNoteAsync(int id)
+        public async Task<IActionResult> DeleteUserNoteAsync(int id)
         {
             try
             {
-                return Ok(await _noteService.DeleteMyNoteAsync(id));
+                return Ok(await _noteService.DeleteUserNoteAsync(id));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
-        }
-
-        [Authorize("admin")]
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllNotesAsync()
-        {
-            return Ok(await _noteService.GetAllNotesTestAsync());  
         }
     }
 }

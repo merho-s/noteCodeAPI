@@ -47,6 +47,15 @@ namespace noteCodeAPI.Services
             };
         }
 
+        public async Task<List<UserApp>> GetAllUsersAsync()
+        {
+            var allUsers = await _userRepos.GetAllAsync();
+            if(allUsers != null)
+                return allUsers;
+
+            throw new DatabaseException();
+        }
+
         public async Task<IToken> GetCurrentTokenInfosAsync()
         {
             string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
@@ -64,7 +73,7 @@ namespace noteCodeAPI.Services
 
         }
 
-        private async Task<string> BanCurrentTokenAsync()
+        private async Task<bool> BanCurrentTokenAsync()
         {
             Token currentToken = (Token)await GetCurrentTokenInfosAsync();
             if (currentToken != null)
@@ -76,7 +85,7 @@ namespace noteCodeAPI.Services
                 };
                 if (await _unusedTokenRepos.SaveAsync(unusedActiveToken))
                 {
-                    return unusedActiveToken.JwtToken;
+                    return true;
                 }
                 throw new DatabaseException();
             } throw new NotFoundUserException();              
@@ -104,13 +113,14 @@ namespace noteCodeAPI.Services
             else throw new SameUsernameException();
         }
 
-        public async Task SignOutAsync()
+        public async Task<bool> SignOutAsync()
         {
-            await BanCurrentTokenAsync();
-            _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+            if (await BanCurrentTokenAsync())
+                return true;
+            return false;
         }
 
-        public async Task<bool> AddToWaitingUsersAsync(UserRequestDTO userRequest)
+        public async Task<bool> RequestAccessAsync(UserRequestDTO userRequest)
         {
             UserApp userFound = await _userRepos.SearchByNameAsync(userRequest.Username);
             if (userFound == null)
@@ -133,7 +143,10 @@ namespace noteCodeAPI.Services
 
         public async Task<List<WaitingUser>> GetAllWaitingUsersAsync()
         {
-            return await _waitingUserRepos.GetAllAsync();
+            var allWaitingUsers = await _waitingUserRepos.GetAllAsync();
+            if (allWaitingUsers != null)
+                return allWaitingUsers;
+            throw new DatabaseException();
         }
         public async Task<bool> WhitelistUserAsync(int userId)
         {

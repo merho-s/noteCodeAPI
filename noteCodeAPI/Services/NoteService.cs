@@ -130,7 +130,7 @@ namespace noteCodeAPI.Services
             
         }
 
-        public async Task<bool> DeleteMyNoteAsync(int noteId)
+        public async Task<bool> DeleteUserNoteAsync(int noteId)
         {
             var noteToDelete = await _noteRepos.GetByIdAsync(noteId);
             if(noteToDelete != null)
@@ -157,7 +157,7 @@ namespace noteCodeAPI.Services
         //    } else return null;
         //}
 
-        public async Task<List<NoteResponseDTO>> GetNotesListAsync() 
+        public async Task<List<NoteResponseDTO>> GetUserNotesAsync() 
         {
             UserApp loggedUser = await _userService.GetLoggedUserAsync();
             if (loggedUser != null)
@@ -189,7 +189,7 @@ namespace noteCodeAPI.Services
             } throw new NotFoundUserException();
         }
 
-        public async Task<NoteResponseDTO> GetSingleNoteAsync(int id)
+        public async Task<NoteResponseDTO> GetSingleUserNoteAsync(int id)
         {
             UserApp loggedUser = await _userService.GetLoggedUserAsync();
             Note singleNote = await _noteRepos.GetByIdAsync(id);
@@ -221,7 +221,7 @@ namespace noteCodeAPI.Services
             } else throw new DatabaseException("This note dosen't exist.");
         }
 
-        public async Task<List<NoteResponseDTO>> GetAllNotesTestAsync()
+        public async Task<List<NoteResponseDTO>> GetAllNotesAsync()
         {
             List<NoteResponseDTO> notesResponseList = new();
 

@@ -11,12 +11,12 @@ namespace noteCodeAPI.Controllers
     [Route("api/v1/user")]
     public class UserController : ControllerBase
     {
-        private IAuthentication _AuthenticationService;
+        private IAuthentication _authenticationService;
         private UserAppService _userService;
 
-        public UserController(IAuthentication AuthenticationService, UserAppService userService)
+        public UserController(IAuthentication authenticationService, UserAppService userService)
         {
-            _AuthenticationService = AuthenticationService;
+            _authenticationService = authenticationService;
             _userService = userService;
         }
 
@@ -25,7 +25,7 @@ namespace noteCodeAPI.Controllers
         {
             try
             {
-                return Ok(await _AuthenticationService.LoginAsync(username, password));
+                return Ok(await _authenticationService.LoginAsync(username, password));
             }
             catch (AuthenticationException ex)
             {
@@ -51,8 +51,7 @@ namespace noteCodeAPI.Controllers
         {
             try
             {
-                await _userService.SignOutAsync();
-                return Ok("User disconnected.");
+                return Ok(await _userService.SignOutAsync());
             }
             catch (Exception ex)
             {
@@ -83,40 +82,11 @@ namespace noteCodeAPI.Controllers
         {
             try
             {
-                return Ok(await _userService.AddToWaitingUsersAsync(userRequest));
+                return Ok(await _userService.RequestAccessAsync(userRequest));
             } catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         } 
-
-        [Authorize("admin")]
-        [HttpPost("whitelist/{id}")]
-        public async Task<IActionResult> WhitelistUserAsync(int id)
-        {
-            try
-            {
-                return Ok(await _userService.WhitelistUserAsync(id));
-            } catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [Authorize("admin")]
-        [HttpGet("waitingusers")]
-        public async Task<IActionResult> GetAllWaitingUsersAsync()
-        {
-            try
-            {
-                return Ok(await _userService.GetAllWaitingUsersAsync());
-            } catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message); 
-            }
-        }
-
-
-
     }
 }
