@@ -3,7 +3,7 @@
 namespace noteCodeAPI.Models
 {
     [Table("notes_tags")]
-    public class NotesTags
+    public class NoteTag
     {
         [Column("id")]
         public int Id { get; set; }

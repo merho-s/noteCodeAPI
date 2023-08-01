@@ -55,38 +55,39 @@ namespace noteCodeAPI.Services
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
                     User = loggedUser,
-                    Codes = await Task.WhenAll(noteRequest.Codes.Select(async c => new CodeSnippet() { Code = c.Code, Description = c.Description, Language = await GetAliasAsync(c.Language) })),
-                    Codetags = await Task.WhenAll(noteRequest.Codetags.Select(async c => await _codetagRepos.GetByNameAsync(c)).ToList())
+                    Codes = new List<CodeSnippet>(),
                 };
 
-                // ADD LANGUAGE CODE TO TAGS (managed in front now)
-/*
-                foreach (var c in newNote.Codes)
+                if (noteRequest.Codes != null)
                 {
-                    Codetag tag = await _codetagRepos.GetByAliasNameAsync(c.Language);
-                    if (tag != null)
+                    foreach (var code in noteRequest.Codes)
                     {
-                        newNote.Codetags.Add(tag);
+                        CodeSnippet codeSnippet = new()
+                        {
+                            Code = code.Code,
+                            Description = code.Description,
+                            Language = await GetAliasAsync(code.Language)
+                        };
+                        newNote.Codes.Add(codeSnippet);
                     }
-                }*/
+                }
 
-                //NO NEED TO CHECK IF TAGS DONT EXIST ANYMORE BECAUSE UNKNOWN WILL BE ABLE TO BE ADDED TO USER TAGS
-                //if (noteRequest.Codetags != null)
-                //{
-                //    foreach (var t in noteRequest.Codetags)
-                //    {
-                //        Codetag newCodetag = await _codetagRepos.GetByNameAsync(t.Name);
-                //        if (newCodetag == null)
-                //        {
-                //            throw new TagsDontExistException();
-                //        }
-                //        else if (!newNote.Codetags.Contains(newCodetag))
-                //        {
-                //            newNote.Codetags.Add(newCodetag);
-                //        }
-                //    }
-                //}
-                //else throw new TagsDontExistException();
+                if (noteRequest.Codetags != null)
+                {
+                    foreach (var t in noteRequest.Codetags)
+                    {
+                        var newCodetag = await _codetagRepos.GetByNameAsync(t);
+                        if (newCodetag == null)
+                        {
+                            throw new TagsDontExistException();
+                        }
+                        else if (!newNote.Codetags.Contains(newCodetag))
+                        {
+                            newNote.Codetags.Add(newCodetag);
+                        }
+                    }
+                }
+                else throw new TagsDontExistException();
 
 
 
@@ -119,7 +120,6 @@ namespace noteCodeAPI.Services
                         Codetags = newNote.Codetags.Select(el => el.Name).ToList()
 
                     };
-
 
                     return noteResponse;
                 }

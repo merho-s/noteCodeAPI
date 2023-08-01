@@ -16,17 +16,13 @@ namespace noteCodeAPI.Tools
         {
 
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    string currentDirectory = Directory.GetCurrentDirectory();
-        //    optionsBuilder.UseSqlServer(@$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30");
-        //}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Note>()
                 .HasMany(n => n.Codetags)
                 .WithMany(t => t.Notes)
-                .UsingEntity(j => j.ToTable("NotesTags"));
+                .UsingEntity("NoteTag");
         }
     }
 }
