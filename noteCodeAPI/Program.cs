@@ -72,6 +72,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IAuthentication, AuthenticationService>();
 builder.Services.AddScoped<NoteService>();
 builder.Services.AddScoped<UserAppService>();
+builder.Services.AddScoped<CodetagService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(a =>

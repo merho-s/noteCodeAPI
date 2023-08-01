@@ -28,7 +28,7 @@ namespace noteCodeAPI.Repositories
 
         public async Task<List<Note>> GetAllByUserIdAsync(int userId)
         {
-            return _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).Where(n => n.User.Id == userId).ToList();
+            return await _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).Where(n => n.User.Id == userId).ToListAsync();
         }
 
         public override async Task<bool> SaveAsync(Note element)

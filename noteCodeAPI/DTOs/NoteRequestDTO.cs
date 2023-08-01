@@ -12,7 +12,7 @@ namespace noteCodeAPI.DTOs
 
         //public IFormFile Image { get; set; }
 
-        public ICollection<CodetagDTO> Codetags { get; set; }
+        public ICollection<string> Codetags { get; set; }
 
     }
 }

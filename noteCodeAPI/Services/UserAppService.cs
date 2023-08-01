@@ -38,8 +38,12 @@ namespace noteCodeAPI.Services
             try
             {
                 var userClaims = _httpContextAccessor.HttpContext.User.Claims;
-                int userId = int.Parse(userClaims.FirstOrDefault(c => c.Type == "id").Value);
-                return await _userRepos.GetByIdAsync(userId);
+                if (userClaims != null)
+                {
+                    int userId = int.Parse(userClaims.FirstOrDefault(c => c.Type == "id").Value);
+                    return await _userRepos.GetByIdAsync(userId);
+                }
+                else throw new NotFoundUserException();
             }
             catch (Exception ex)
             {
