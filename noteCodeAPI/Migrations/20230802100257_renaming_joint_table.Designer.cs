@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using noteCodeAPI.Tools;
 
@@ -11,9 +12,11 @@ using noteCodeAPI.Tools;
 namespace noteCodeAPI.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class DataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230802100257_renaming_joint_table")]
+    partial class renamingjointtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +71,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasIndex("NoteId");
 
-                    b.ToTable("code_snippets");
+                    b.ToTable("code_snippet");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Codetag", b =>
@@ -86,7 +89,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("codetags");
+                    b.ToTable("codetag");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.Note", b =>
@@ -114,7 +117,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("notes");
+                    b.ToTable("note");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.TagAlias", b =>
@@ -162,7 +165,7 @@ namespace noteCodeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("unused_active_tokens");
+                    b.ToTable("unused_active_token");
                 });
 
             modelBuilder.Entity("noteCodeAPI.Models.UserApp", b =>

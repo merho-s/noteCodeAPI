@@ -2,7 +2,7 @@
 
 namespace noteCodeAPI.Models
 {
-    [Table("notes_tags")]
+    [Table("notes_codetags")]
     public class NoteTag
     {
         [Column("id")]

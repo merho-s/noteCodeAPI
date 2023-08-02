@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace noteCodeAPI.Models
 {
-    [Table("unused_active_token")]
+    [Table("unused_active_tokens")]
     public class UnusedActiveToken: IToken
     {
         private int id;

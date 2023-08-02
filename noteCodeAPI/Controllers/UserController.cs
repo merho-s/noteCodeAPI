@@ -21,11 +21,11 @@ namespace noteCodeAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromForm] string username, [FromForm] string password)
+        public async Task<IActionResult> LoginAsync(UserRequestDTO userRequest)
         {
             try
             {
-                return Ok(await _authenticationService.LoginAsync(username, password));
+                return Ok(await _authenticationService.LoginAsync(userRequest.Username, userRequest.Password));
             }
             catch (AuthenticationException ex)
             {

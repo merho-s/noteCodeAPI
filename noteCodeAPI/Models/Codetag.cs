@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace noteCodeAPI.Models
 {
-    [Table("codetag")]
+    [Table("codetags")]
     public class Codetag
     {
         private int id;

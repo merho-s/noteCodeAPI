@@ -51,12 +51,11 @@ namespace noteCodeAPI.Services
             };
         }
 
-        public async Task<List<UserApp>> GetAllUsersAsync()
+        public async Task<List<UserResponseDTO>> GetAllUsersAsync()
         {
             var allUsers = await _userRepos.GetAllAsync();
             if(allUsers != null)
-                return allUsers;
-
+                return allUsers.Select(u => new UserResponseDTO() { Id=u.Id, Username=u.Username, Role=u.Role.ToString()}).ToList();
             throw new DatabaseException();
         }
 
@@ -145,11 +144,11 @@ namespace noteCodeAPI.Services
             else throw new SameUsernameException();
         }
 
-        public async Task<List<WaitingUser>> GetAllWaitingUsersAsync()
+        public async Task<List<UserResponseDTO>> GetAllWaitingUsersAsync()
         {
             var allWaitingUsers = await _waitingUserRepos.GetAllAsync();
             if (allWaitingUsers != null)
-                return allWaitingUsers;
+                return allWaitingUsers.Select(wu => new UserResponseDTO() { Id = wu.Id, Username = wu.Username }).ToList();
             throw new DatabaseException();
         }
         public async Task<bool> WhitelistUserAsync(int userId)

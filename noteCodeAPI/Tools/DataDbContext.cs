@@ -22,7 +22,11 @@ namespace noteCodeAPI.Tools
             modelBuilder.Entity<Note>()
                 .HasMany(n => n.Codetags)
                 .WithMany(t => t.Notes)
-                .UsingEntity("NoteTag");
+                .UsingEntity(j => {
+                    j.ToTable("notes_tags");
+                    j.Property("CodetagsId").HasColumnName("tag_id");
+                    j.Property("NotesId").HasColumnName("note_id");
+                });
         }
     }
 }

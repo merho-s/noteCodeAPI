@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace noteCodeAPI.Models
 {
-    [Table("note")]
+    [Table("notes")]
     public class Note
     {
         private int id;
