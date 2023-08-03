@@ -15,32 +15,13 @@ namespace noteCodeAPI.Services
     {
         private NoteRepository _noteRepos;
         private CodetagRepository _codetagRepos;
-        private TagAliasRepository _tagAliasRepos;
         private UserAppService _userService;
 
-        public NoteService(NoteRepository noteRepos, CodetagRepository codetagRepos, TagAliasRepository tagAliasRepos, UserAppService userService)
+        public NoteService(NoteRepository noteRepos, CodetagRepository codetagRepos, UserAppService userService)
         {
             _noteRepos = noteRepos;
             _codetagRepos = codetagRepos;
-            _tagAliasRepos = tagAliasRepos;
             _userService = userService;
-        }
-
-        public async Task<string> GetAliasAsync(string tag)
-        {
-            TagAlias alias = await _tagAliasRepos.GetAliasByNameAsync(tag);
-            if (alias != null)
-            {
-                return alias.Name;
-            }
-            var allCodetags = await _codetagRepos.GetAllAsync();
-            var codetag = allCodetags.FirstOrDefault(t => t.Name.ToLower() == tag.ToLower());
-            if (codetag != null)
-            {
-                var tagAlias = await _tagAliasRepos.GetAliasByTagIdAsync(codetag.Id);
-                return tagAlias.Name;
-            }
-            throw new TagsDontExistException();
         }
 
         public async Task<NoteResponseDTO> AddNoteAsync(NoteRequestDTO noteRequest/*, IFormFile imageFile*/)
@@ -66,7 +47,7 @@ namespace noteCodeAPI.Services
                         {
                             Code = code.Code,
                             Description = code.Description,
-                            Language = await GetAliasAsync(code.Language)
+                            Language = code.Language
                         };
                         newNote.Codes.Add(codeSnippet);
                     }

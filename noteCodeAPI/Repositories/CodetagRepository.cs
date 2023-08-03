@@ -6,10 +6,8 @@ namespace noteCodeAPI.Repositories
 {
     public class CodetagRepository : BaseRepository<Codetag>
     {
-        private TagAliasRepository _tagRepos;
-        public CodetagRepository(DataDbContext dbContext, TagAliasRepository tagRepos) : base(dbContext)
+        public CodetagRepository(DataDbContext dbContext) : base(dbContext)
         {
-            _tagRepos = tagRepos;
         }
 
         public override async Task<bool> DeleteAsync(Codetag element)
@@ -19,12 +17,12 @@ namespace noteCodeAPI.Repositories
 
         public override async Task<List<Codetag>> GetAllAsync()
         {
-            return await _dbContext.Codetags.Include(t => t.Aliases).ToListAsync();
+            return await _dbContext.Codetags.ToListAsync();
         }
 
         public override async Task<Codetag> GetByIdAsync(int id)
         {
-            return await _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefaultAsync(t => t.Id == id);
+            return await _dbContext.Codetags.FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public override async Task<bool> SaveAsync(Codetag element)
@@ -34,13 +32,8 @@ namespace noteCodeAPI.Repositories
 
         public async Task<Codetag> GetByNameAsync(string name)
         {
-            return await _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefaultAsync(t => t.Name.ToLower() == name.ToLower());
+            return await _dbContext.Codetags.FirstOrDefaultAsync(t => t.Name.ToLower() == name.ToLower());
         }
 
-        public async Task<Codetag> GetByAliasNameAsync(string alias)
-        {
-            var tagAlias = await _tagRepos.GetAliasByNameAsync(alias);
-            return await _dbContext.Codetags.Include(t => t.Aliases).FirstOrDefaultAsync(t => t.Aliases.Contains(tagAlias));
-        }
     }
 }
