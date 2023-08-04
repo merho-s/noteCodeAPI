@@ -21,30 +21,17 @@ namespace noteCodeAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync(UserRequestDTO userRequest)
+        public async Task<IActionResult> LoginAsync(LoginRequestDTO loginRequest)
         {
             try
             {
-                return Ok(await _authenticationService.LoginAsync(userRequest.Username, userRequest.Password));
+                return Ok(await _authenticationService.LoginAsync(loginRequest.Username, loginRequest.Password));
             }
             catch (AuthenticationException ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
-
-        //[HttpPost("signup")]
-        //public async Task<IActionResult> SignUpAsync([FromBody] UserRequestDTO userRequest)
-        //{
-        //    try
-        //    {
-        //        return Ok(await _userService.SignUpAsync(userRequest)); 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
 
         [HttpPost("signout")]
         public async Task<IActionResult> SignOutAsync()
@@ -87,6 +74,18 @@ namespace noteCodeAPI.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-        } 
+        }
+
+        [HttpGet("userstatus")]
+        public async Task<IActionResult> GetUserStatusAsync(int userId)
+        {
+            try
+            {
+                return Ok(await _userService.GetUserStatusAsync(userId));
+            } catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

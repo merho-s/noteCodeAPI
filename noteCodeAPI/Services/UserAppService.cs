@@ -21,16 +21,14 @@ namespace noteCodeAPI.Services
         private IHttpContextAccessor? _httpContextAccessor;
         private UnusedActiveTokenRepository _unusedTokenRepos;
         private IPasswordHasher _passwordHasher;
-        private WaitingUserRepository _waitingUserRepos;
  
 
-        public UserAppService(UserAppRepository userRepos, IHttpContextAccessor httpContextAccessor, IAuthentication login, UnusedActiveTokenRepository unusedTokenRepos, IPasswordHasher passwordHasher, WaitingUserRepository waitingUserRepos)
+        public UserAppService(UserAppRepository userRepos, IHttpContextAccessor httpContextAccessor, IAuthentication login, UnusedActiveTokenRepository unusedTokenRepos, IPasswordHasher passwordHasher)
         {
             _userRepos = userRepos;
             _httpContextAccessor = httpContextAccessor;
             _unusedTokenRepos = unusedTokenRepos;
             _passwordHasher = passwordHasher;
-            _waitingUserRepos = waitingUserRepos;
         }
 
         public async Task<UserApp> GetLoggedUserAsync()
@@ -55,7 +53,7 @@ namespace noteCodeAPI.Services
         {
             var allUsers = await _userRepos.GetAllAsync();
             if(allUsers != null)
-                return allUsers.Select(u => new UserResponseDTO() { Id=u.Id, Username=u.Username, Role=u.Role.ToString()}).ToList();
+                return allUsers.Select(u => new UserResponseDTO() { Id = u.Id, Username = u.Username, Email = u.Email, Role = u.Role.ToString()}).ToList();
             throw new DatabaseException();
         }
 
@@ -94,27 +92,6 @@ namespace noteCodeAPI.Services
             } throw new NotFoundUserException();              
         }
 
-        public async Task<bool> SignUpAsync(UserRequestDTO userRequest)
-        {
-            UserApp userFound = await _userRepos.SearchByNameAsync(userRequest.Username);
-            if (userFound == null)
-            {
-                string passwordSalt = _passwordHasher.GenerateSalt();
-                UserApp newUser = new()
-                {
-                    Username = userRequest.Username,
-                    PasswordSalt = passwordSalt,
-                    PasswordHashed = _passwordHasher.GenerateHashPassword(userRequest.Password, passwordSalt),
-                    Role = Role.User
-                };
-                if (await _userRepos.SaveAsync(newUser))
-                {
-                    return true;
-                }
-                else throw new DatabaseException();
-            }
-            else throw new SameUsernameException();
-        }
 
         public async Task<bool> SignOutAsync()
         {
@@ -123,21 +100,32 @@ namespace noteCodeAPI.Services
             return false;
         }
 
-        public async Task<bool> RequestAccessAsync(UserRequestDTO userRequest)
+        public async Task<UserResponseDTO> RequestAccessAsync(UserRequestDTO userRequest)
         {
             UserApp userFound = await _userRepos.SearchByNameAsync(userRequest.Username);
             if (userFound == null)
             {
                 string passwordSalt = _passwordHasher.GenerateSalt();
-                WaitingUser newUser = new()
+                UserApp newUser = new()
                 {
                     Username = userRequest.Username,
+                    Email = userRequest.Email,
                     PasswordSalt = passwordSalt,
                     PasswordHashed = _passwordHasher.GenerateHashPassword(userRequest.Password, passwordSalt),
+                    Role = Role.User,
+                    IsValid = false
                 };
-                if (await _waitingUserRepos.SaveAsync(newUser))
+                if (await _userRepos.SaveAsync(newUser))
                 {
-                    return true;
+                    var waitingUserAdded = await _userRepos.SearchByNameAsync(newUser.Username);
+                    return new UserResponseDTO()
+                    {
+                        Id = waitingUserAdded.Id,
+                        Username = waitingUserAdded.Username,
+                        Email = waitingUserAdded.Email,
+                        Role = waitingUserAdded.Role.ToString()
+                    };
+
                 }
                 else throw new DatabaseException();
             }
@@ -146,29 +134,33 @@ namespace noteCodeAPI.Services
 
         public async Task<List<UserResponseDTO>> GetAllWaitingUsersAsync()
         {
-            var allWaitingUsers = await _waitingUserRepos.GetAllAsync();
+            var allWaitingUsers = await _userRepos.GetWaitingUsers();
             if (allWaitingUsers != null)
-                return allWaitingUsers.Select(wu => new UserResponseDTO() { Id = wu.Id, Username = wu.Username }).ToList();
+                return allWaitingUsers.Select(wu => new UserResponseDTO() { Id = wu.Id, Username = wu.Username, Email = wu.Email }).ToList();
             throw new DatabaseException();
         }
+
+        public async Task<bool> GetUserStatusAsync(int userId)
+        {
+            var user = await _userRepos.GetByIdAsync(userId);
+            if(user != null)
+            {
+                return user.IsValid;
+            } throw new DatabaseException();
+        }
+
         public async Task<bool> WhitelistUserAsync(int userId)
         {
-            var waitingUser = await _waitingUserRepos.GetByIdAsync(userId);
+            var waitingUser = await _userRepos.GetByIdAsync(userId);
             if(waitingUser != null)
             {
-                UserApp newUser = new()
-                {
-                    Username = waitingUser.Username,
-                    PasswordSalt = waitingUser.PasswordSalt,
-                    PasswordHashed = waitingUser.PasswordHashed,
-                    Role = Role.User
-                };
+                waitingUser.IsValid = true;
               
-                if(await _userRepos.SaveAsync(newUser))
+                if(await _userRepos.UpdateAsync())
                 {
-                    await _waitingUserRepos.DeleteAsync(waitingUser);
                     return true;
                 }
+                throw new DatabaseException();
             }
             throw new DatabaseException();
         }
@@ -183,6 +175,7 @@ namespace noteCodeAPI.Services
                 user.Username = userRequest.Username;
                 user.PasswordHashed = _passwordHasher.GenerateHashPassword(userRequest.Password, salt);
                 user.PasswordSalt = salt;
+                user.Email = userRequest.Email;
                 if (await _userRepos.UpdateAsync())
                 {
                     return true;

@@ -10,6 +10,8 @@ namespace noteCodeAPI.Models
         private string? username;
         private string? passwordHashed;
         private string? passwordSalt;
+        private string? email;
+        private bool isValid;
         private Role role;
         private ICollection<Note> notes;
 
@@ -24,6 +26,12 @@ namespace noteCodeAPI.Models
 
         [Column("password_salt")]
         public string? PasswordSalt { get => passwordSalt; set => passwordSalt = value; }
+
+        [Column("email")]
+        public string? Email { get => email; set => email = value; }
+
+        [Column("is_valid")]
+        public bool IsValid { get => isValid; set => isValid = value; }
 
         [Column("role")]
         public Role Role { get => role; set => role = value; }

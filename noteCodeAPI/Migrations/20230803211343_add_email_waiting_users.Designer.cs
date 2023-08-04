@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using noteCodeAPI.Tools;
 
@@ -11,9 +12,11 @@ using noteCodeAPI.Tools;
 namespace noteCodeAPI.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class DataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230803211343_add_email_waiting_users")]
+    partial class addemailwaitingusers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,10 +160,6 @@ namespace noteCodeAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
 
-                    b.Property<bool>("IsValid")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_valid");
-
                     b.Property<string>("PasswordHashed")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("password_hashed");
@@ -180,6 +179,36 @@ namespace noteCodeAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("noteCodeAPI.Models.WaitingUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("PasswordHashed")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("password_hashed");
+
+                    b.Property<string>("PasswordSalt")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("password_salt");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("waiting_users");
                 });
 
             modelBuilder.Entity("CodetagNote", b =>

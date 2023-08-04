@@ -42,5 +42,10 @@ namespace noteCodeAPI.Repositories
         {
             return await _dbContext.Users.Include(u => u.Notes).FirstOrDefaultAsync(u => u.Username == username && u.PasswordHashed == password);
         }
+
+        public async Task<List<UserApp>> GetWaitingUsers()
+        {
+            return await _dbContext.Users.Include(u => u.Notes).Where(u => u.IsValid == false).ToListAsync();
+        }
     }
 }

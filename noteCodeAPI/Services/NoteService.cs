@@ -35,6 +35,7 @@ namespace noteCodeAPI.Services
                 {
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
+                    CreationDate = DateTime.Now,
                     User = loggedUser,
                     Codes = new List<CodeSnippet>(),
                 };
@@ -97,6 +98,7 @@ namespace noteCodeAPI.Services
                         Id = newNote.Id,
                         Title = newNote.Title,
                         Description = newNote.Description,
+                        CreationDate = newNote.CreationDate,
                         Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = newNote.Codetags.Select(el => el.Name).ToList()
 
@@ -152,23 +154,14 @@ namespace noteCodeAPI.Services
                         Id = n.Id,
                         Title = n.Title,
                         Description = n.Description,
+                        CreationDate = n.CreationDate,
                         Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = n.Codetags.Select(ct => ct.Name).ToList()
-                        //NO NEED TO CHECK IF TAGS DONT EXIST ANYMORE BECAUSE UNKNOWN WILL BE ABLE TO BE ADDED TO USER TAGS
-                        //Codetags = await Task.WhenAll(n.Codetags.Select(async el =>
-                        //{
-                        //    Codetag codetag = await _codetagRepos.GetByIdAsync(el.Id);
-                        //    if (codetag != null)
-                        //    {
-                        //        return new CodetagDTO { Name = codetag.Name };
-                        //    }
-                        //    throw new TagsDontExistException();
-                        //}))
                     };
 
                     notesResponseList.Add(noteResponse);
                 }
-                return notesResponseList;
+                return notesResponseList.OrderByDescending(note => note.CreationDate).ToList();
             } throw new NotFoundUserException();
         }
 
@@ -185,19 +178,9 @@ namespace noteCodeAPI.Services
                         Id = singleNote.Id,
                         Title = singleNote.Title,
                         Description = singleNote.Description,
+                        CreationDate = singleNote.CreationDate,
                         Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                         Codetags = singleNote.Codetags.Select(ct => ct.Name).ToList()
-                        //NO NEED TO CHECK IF TAGS DONT EXIST ANYMORE BECAUSE UNKNOWN WILL BE ABLE TO BE ADDED TO USER TAGS
-                        //Codetags = await Task.WhenAll(singleNote.Codetags.Select(async el =>
-                        //{
-                        //    Codetag codetag = await _codetagRepos.GetByIdAsync(el.Id);
-                        //    if (codetag != null)
-                        //    {
-                        //        return new CodetagDTO { Name = codetag.Name };
-                        //    }
-                        //    throw new TagsDontExistException();
-                        //}))
-                        //Image = singleNote.Image,
                     };
                     
                     return noteResponse;
@@ -218,19 +201,9 @@ namespace noteCodeAPI.Services
                     Id = n.Id,
                     Title = n.Title,
                     Description = n.Description,
+                    CreationDate = n.CreationDate,
                     Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
                     Codetags = n.Codetags.Select(ct => ct.Name).ToList()
-                    //NO NEED TO CHECK IF TAGS DONT EXIST ANYMORE BECAUSE UNKNOWN WILL BE ABLE TO BE ADDED TO USER TAGS
-                    //Codetags = await Task.WhenAll(n.Codetags.Select(async el =>
-                    //{
-                    //    Codetag codetag = await _codetagRepos.GetByIdAsync(el.Id);
-                    //    if (codetag != null)
-                    //    {
-                    //        return new CodetagDTO { Name = codetag.Name };
-                    //    }
-                    //    throw new TagsDontExistException();
-                    //}))
-                    //Image = n.Image
                 };
 
                 notesResponseList.Add(noteResponse);

@@ -1,9 +1,8 @@
 ﻿namespace noteCodeAPI.DTOs
 {
-    public class UserRequestDTO
+    public class LoginRequestDTO
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Email { get; set; }
     }
 }

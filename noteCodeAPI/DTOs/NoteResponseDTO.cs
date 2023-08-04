@@ -10,6 +10,8 @@ namespace noteCodeAPI.DTOs
 
         public string Description { get; set; }
 
+        public DateTime CreationDate { get; set; }
+
         //public string Image { get; set; }
 
         public ICollection<CodeSnippetDTO> Codes { get; set; }
