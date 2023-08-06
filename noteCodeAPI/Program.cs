@@ -53,7 +53,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("all", policyBuilder =>
     {
-        policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policyBuilder.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 // LOCAL DATABASE SQLSERVER
@@ -85,13 +87,13 @@ builder.Services.AddAuthentication(a =>
 {
     ValidateIssuerSigningKey = true,
     ValidateIssuer = true,
-    ValidIssuer = "sogeti",
+    ValidIssuer = "noteCode",
     ValidateLifetime = true,
     ValidateAudience = true,
-    ValidAudience = "sogeti",
+    ValidAudience = "noteCode",
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")),
 
-}).AddCookie();
+});
 builder.Services.AddAuthorization((builder) =>
 {
     builder.AddPolicy("admin", options =>
@@ -113,7 +115,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors("all");
 app.UseAuthentication();
 app.UseAuthorization();

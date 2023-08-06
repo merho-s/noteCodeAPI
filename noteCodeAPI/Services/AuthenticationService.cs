@@ -42,8 +42,8 @@ namespace noteCodeAPI.Services
                         new Claim(ClaimTypes.Role, user.Role.ToString().ToLower()),
                         new Claim("id", user.Id.ToString())
                             }),
-                            Issuer = "sogeti",
-                            Audience = "sogeti"
+                            Issuer = "noteCode",
+                            Audience = "noteCode"
 
                         };
                         SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);

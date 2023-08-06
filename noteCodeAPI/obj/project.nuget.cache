@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "1MbbVjvna9cIBIyJh1FtwdE/mVw4KiDPKZG7KJmPNUySe7x/JY6IfM4ewK+8Dfuzpq7v5qclkcDSJIdisTZhTQ==",
+  "dgSpecHash": "nvxlr8UJG5Bt2kKHS9rRhz0wHl/Vo+yNnxEjxzeExIxrEpgi7VKJCAO/T+ebwYiq5iR+4ui0a70ivs2L+DssNg==",
   "success": true,
   "projectFilePath": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
   "expectedPackageFiles": [
@@ -49,6 +49,7 @@
     "C:\\Users\\mouss\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\mouss\\.nuget\\packages\\microsoft.sqlserver.management.sqlparser\\160.22524.0\\microsoft.sqlserver.management.sqlparser.160.22524.0.nupkg.sha512",
     "C:\\Users\\mouss\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\mouss\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.0\\microsoft.visualstudio.azure.containers.tools.targets.1.17.0.nupkg.sha512",
     "C:\\Users\\mouss\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\mouss\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\mouss\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
