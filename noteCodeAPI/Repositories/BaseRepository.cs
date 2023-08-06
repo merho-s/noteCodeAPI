@@ -13,6 +13,7 @@ namespace noteCodeAPI.Repositories
 
         public abstract Task<bool> SaveAsync(T element);
         public abstract Task<bool> DeleteAsync(T element);
+        public abstract Task<T> GetByGuidAsync(Guid id);
         public abstract Task<T> GetByIdAsync(int id);
         public abstract Task<List<T>> GetAllAsync();
         public async Task<bool> UpdateAsync()

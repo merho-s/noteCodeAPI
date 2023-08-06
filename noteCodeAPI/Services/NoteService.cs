@@ -113,9 +113,9 @@ namespace noteCodeAPI.Services
             
         }
 
-        public async Task<bool> DeleteUserNoteAsync(int noteId)
+        public async Task<bool> DeleteUserNoteAsync(Guid noteId)
         {
-            var noteToDelete = await _noteRepos.GetByIdAsync(noteId);
+            var noteToDelete = await _noteRepos.GetByGuidAsync(noteId);
             if(noteToDelete != null)
             {
                 var userLogged = await _userService.GetLoggedUserAsync();
@@ -165,10 +165,10 @@ namespace noteCodeAPI.Services
             } throw new NotFoundUserException();
         }
 
-        public async Task<NoteResponseDTO> GetSingleUserNoteAsync(int id)
+        public async Task<NoteResponseDTO> GetSingleUserNoteAsync(Guid id)
         {
             UserApp loggedUser = await _userService.GetLoggedUserAsync();
-            Note singleNote = await _noteRepos.GetByIdAsync(id);
+            Note singleNote = await _noteRepos.GetByGuidAsync(id);
             if(singleNote != null)
             {
                 if (singleNote.User == loggedUser)

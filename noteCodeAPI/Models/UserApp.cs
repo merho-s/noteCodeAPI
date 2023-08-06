@@ -7,10 +7,10 @@ namespace noteCodeAPI.Models
     public class UserApp
     {
         private int id;
-        private string? username;
-        private string? passwordHashed;
-        private string? passwordSalt;
-        private string? email;
+        private string username;
+        private string passwordHashed;
+        private string passwordSalt;
+        private string email;
         private bool isValid;
         private Role role;
         private ICollection<Note> notes;
@@ -19,16 +19,16 @@ namespace noteCodeAPI.Models
         public int Id { get => id; set => id = value; }
 
         [Column("username")]
-        public string? Username { get => username; set => username = value; }
+        public string Username { get => username; set => username = value; }
 
         [Column("password_hashed")]
-        public string? PasswordHashed { get => passwordHashed; set => passwordHashed = value; }
+        public string PasswordHashed { get => passwordHashed; set => passwordHashed = value; }
 
         [Column("password_salt")]
-        public string? PasswordSalt { get => passwordSalt; set => passwordSalt = value; }
+        public string PasswordSalt { get => passwordSalt; set => passwordSalt = value; }
 
         [Column("email")]
-        public string? Email { get => email; set => email = value; }
+        public string Email { get => email; set => email = value; }
 
         [Column("is_valid")]
         public bool IsValid { get => isValid; set => isValid = value; }

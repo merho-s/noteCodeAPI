@@ -13,6 +13,8 @@ using noteCodeAPI.Tools;
 using System.Reflection;
 using System.Text;
 
+IConfiguration Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -54,14 +56,16 @@ builder.Services.AddCors(options =>
         policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
-string currentDirectory = Directory.GetCurrentDirectory();
-string localDBmdf = @$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30";
-string localDB = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=noteCodeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-builder.Services.AddDbContext<DataDbContext>(options =>
+// LOCAL DATABASE SQLSERVER
+//string currentDirectory = Directory.GetCurrentDirectory();
+//string localDBmdf = @$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30";
+//string localDB = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=noteCodeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+//builder.Services.AddDbContext<DataDbContext>(options =>
 
-    options.UseSqlServer(localDB),
-    ServiceLifetime.Scoped
-);
+//    options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase")),
+//    ServiceLifetime.Scoped
+//);
+builder.Services.AddDbContext<DataDbContext>();
 builder.Services.AddScoped<NoteRepository>();
 builder.Services.AddScoped<UserAppRepository>();
 builder.Services.AddScoped<CodetagRepository>();

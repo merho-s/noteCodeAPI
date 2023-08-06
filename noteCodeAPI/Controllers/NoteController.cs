@@ -72,7 +72,7 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserNoteByIdAsync(int id)
+        public async Task<IActionResult> GetUserNoteByGuidAsync(Guid id)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace noteCodeAPI.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserNoteAsync(int id)
+        public async Task<IActionResult> DeleteUserNoteAsync(Guid id)
         {
             try
             {

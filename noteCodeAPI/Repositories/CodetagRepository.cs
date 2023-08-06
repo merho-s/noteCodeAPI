@@ -35,5 +35,9 @@ namespace noteCodeAPI.Repositories
             return await _dbContext.Codetags.FirstOrDefaultAsync(t => t.Name.ToLower() == name.ToLower());
         }
 
+        public override Task<Codetag> GetByGuidAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

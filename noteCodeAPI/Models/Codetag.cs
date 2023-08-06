@@ -7,14 +7,14 @@ namespace noteCodeAPI.Models
     public class Codetag
     {
         private int id;
-        private string? name;
+        private string name;
         private ICollection<Note>? notes;
 
         [Column("id")]
         public int Id { get => id; set => id = value; }
 
         [Column("name")]
-        public string? Name { get => name; set => name = value ?? throw new ArgumentNullException(nameof(value)); }
+        public string Name { get => name; set => name = value; }
 
         public ICollection<Note>? Notes { get => notes; set => notes = value; }
 

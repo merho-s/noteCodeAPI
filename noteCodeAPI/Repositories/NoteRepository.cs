@@ -21,7 +21,7 @@ namespace noteCodeAPI.Repositories
             return await _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).ToListAsync();        
         }
 
-        public override async Task<Note> GetByIdAsync(int id)
+        public override async Task<Note> GetByGuidAsync(Guid id)
         {
             return await _dbContext.Notes.Include(n => n.Codetags).Include(n => n.Codes).FirstOrDefaultAsync(n => n.Id == id);
         }
@@ -35,6 +35,11 @@ namespace noteCodeAPI.Repositories
         {
             _dbContext.Notes.Add(element);
             return await UpdateAsync();
+        }
+
+        public override Task<Note> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

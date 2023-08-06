@@ -26,35 +26,38 @@ namespace noteCodeAPI.Services
             UserApp user = await _userRepos.SearchByNameAsync(username);
             if(user != null)
             {
-                string passwordHashed = _passwordHasher.GenerateHashPassword(password, user.PasswordSalt);
-                if(user.PasswordHashed == passwordHashed)
+                if(user.IsValid)
                 {
-                    JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-                    SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
+                    string passwordHashed = _passwordHasher.GenerateHashPassword(password, user.PasswordSalt);
+                    if (user.PasswordHashed == passwordHashed)
                     {
-                        Expires = DateTime.Now.AddHours(1),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")), SecurityAlgorithms.HmacSha256),
-                        Subject = new ClaimsIdentity(new Claim[]
+                        JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+                        SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
                         {
+                            Expires = DateTime.Now.AddHours(1),
+                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")), SecurityAlgorithms.HmacSha256),
+                            Subject = new ClaimsIdentity(new Claim[]
+                            {
                         new Claim(ClaimTypes.Name, user.Username),
                         new Claim(ClaimTypes.Role, user.Role.ToString().ToLower()),
                         new Claim("id", user.Id.ToString())
-                        }),
-                        Issuer = "sogeti",
-                        Audience = "sogeti"
+                            }),
+                            Issuer = "sogeti",
+                            Audience = "sogeti"
 
-                    };
-                    SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
-                    LoginResponseDTO loginResponse = new()
-                    {
-                        Username = user.Username,
-                        Token = jwtSecurityTokenHandler.WriteToken(securityToken),
-                        ExpirationDate = securityToken.ValidTo,
-                        Role = user.Role.ToString(),
-                    };
-                    return loginResponse;
+                        };
+                        SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
+                        LoginResponseDTO loginResponse = new()
+                        {
+                            Username = user.Username,
+                            Token = jwtSecurityTokenHandler.WriteToken(securityToken),
+                            ExpirationDate = securityToken.ValidTo,
+                            Role = user.Role.ToString(),
+                        };
+                        return loginResponse;
+                    }
                 }
-
+                throw new NotValidUserException();
             }   
             throw new AuthenticationException();
         }

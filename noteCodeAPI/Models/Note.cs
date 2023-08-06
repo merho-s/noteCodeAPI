@@ -6,9 +6,9 @@ namespace noteCodeAPI.Models
     [Table("notes")]
     public class Note
     {
-        private int id;
-        private string? title;
-        private string? description;
+        private Guid id;
+        private string title;
+        private string description;
         private DateTime creationDate;
         //private string? image;
         private ICollection<CodeSnippet>? codes;
@@ -16,13 +16,13 @@ namespace noteCodeAPI.Models
         private UserApp? user;
 
         [Column("id")]
-        public int Id { get => id; set => id = value; }
+        public Guid Id { get => id; set => id = value; }
 
         [Column("title")]
-        public string? Title { get => title; set => title = value; }
+        public string Title { get => title; set => title = value; }
 
         [Column("description")]
-        public string? Description { get => description; set => description = value; }
+        public string Description { get => description; set => description = value; }
 
         [Column("creation_date")]
         public DateTime CreationDate { get => creationDate; set => creationDate = value; }

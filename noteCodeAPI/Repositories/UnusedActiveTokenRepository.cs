@@ -21,6 +21,11 @@ namespace noteCodeAPI.Repositories
             return await _dbContext.UnusedActiveTokens.ToListAsync();
         }
 
+        public override Task<UnusedActiveToken> GetByGuidAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public override async Task<UnusedActiveToken> GetByIdAsync(int id)
         {
             return await _dbContext.UnusedActiveTokens.FirstOrDefaultAsync(t => t.Id == id);

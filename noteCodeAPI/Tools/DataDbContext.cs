@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using noteCodeAPI.Models;
 
 namespace noteCodeAPI.Tools
@@ -10,9 +11,16 @@ namespace noteCodeAPI.Tools
         public DbSet<Codetag> Codetags { get; set; }
         public DbSet<UnusedActiveToken> UnusedActiveTokens { get; set; }
 
-        public DataDbContext(DbContextOptions options) : base(options)
-        {
+        protected readonly IConfiguration _configuration;
 
+        public DataDbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite(_configuration.GetConnectionString("Database"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,11 +28,19 @@ namespace noteCodeAPI.Tools
             modelBuilder.Entity<Note>()
                 .HasMany(n => n.Codetags)
                 .WithMany(t => t.Notes)
-                .UsingEntity(j => {
+                .UsingEntity(j =>
+                {
                     j.ToTable("notes_tags");
                     j.Property("CodetagsId").HasColumnName("tag_id");
                     j.Property("NotesId").HasColumnName("note_id");
                 });
+            //    .Property(n => n.Id)
+            //    .HasDefaultValueSql("NEWID()");
+
+            //modelBuilder.Entity<CodeSnippet>()
+            //    .Property(c => c.Id)
+            //    .HasDefaultValueSql("NEWID()");
+            
         }
     }
 }

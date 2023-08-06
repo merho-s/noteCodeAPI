@@ -47,5 +47,10 @@ namespace noteCodeAPI.Repositories
         {
             return await _dbContext.Users.Include(u => u.Notes).Where(u => u.IsValid == false).ToListAsync();
         }
+
+        public override Task<UserApp> GetByGuidAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

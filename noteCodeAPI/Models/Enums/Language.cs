@@ -59,7 +59,7 @@ namespace noteCodeAPI.Models.Enums
                 { "IDL", null },
                 { "Angular", null },
                 { "VueJS", null },
-                { "VS Code", null },
+                { "Visual Studio Code", null },
                 { "Visual Studio", null },
                 { "Flutter", null },
                 { "PowerApps", null },
