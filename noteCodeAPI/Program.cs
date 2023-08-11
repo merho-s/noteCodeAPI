@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -9,7 +10,7 @@ using noteCodeAPI.Repositories;
 using noteCodeAPI.Services;
 using noteCodeAPI.Services.Interfaces;
 using noteCodeAPI.Tools;
-
+using System.Net;
 using System.Reflection;
 using System.Text;
 
@@ -115,7 +116,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+
+
+app.UseHttpsRedirection();
 app.UseCors("all");
 app.UseAuthentication();
 app.UseAuthorization();

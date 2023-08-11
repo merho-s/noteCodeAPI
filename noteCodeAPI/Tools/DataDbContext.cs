@@ -34,13 +34,6 @@ namespace noteCodeAPI.Tools
                     j.Property("CodetagsId").HasColumnName("tag_id");
                     j.Property("NotesId").HasColumnName("note_id");
                 });
-            //    .Property(n => n.Id)
-            //    .HasDefaultValueSql("NEWID()");
-
-            //modelBuilder.Entity<CodeSnippet>()
-            //    .Property(c => c.Id)
-            //    .HasDefaultValueSql("NEWID()");
-            
         }
     }
 }
