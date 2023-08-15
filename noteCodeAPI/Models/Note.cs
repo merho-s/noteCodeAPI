@@ -9,7 +9,7 @@ namespace noteCodeAPI.Models
         private Guid id;
         private string title;
         private string description;
-        private DateTime creationDate;
+        private DateTimeOffset creationDate;
         //private string? image;
         private ICollection<CodeSnippet>? codes;
         private ICollection<Codetag>? codetags;
@@ -25,7 +25,7 @@ namespace noteCodeAPI.Models
         public string Description { get => description; set => description = value; }
 
         [Column("creation_date")]
-        public DateTime CreationDate { get => creationDate; set => creationDate = value; }
+        public DateTimeOffset CreationDate { get => creationDate; set => creationDate = value; }
 
         //[Column("image")]
         //public string? Image { get => image; set => image = value; }

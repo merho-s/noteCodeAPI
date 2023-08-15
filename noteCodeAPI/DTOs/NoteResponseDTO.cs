@@ -10,7 +10,7 @@ namespace noteCodeAPI.DTOs
 
         public string Description { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTimeOffset CreationDate { get; set; }
 
         //public string Image { get; set; }
 

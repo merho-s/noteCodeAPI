@@ -14,11 +14,13 @@ namespace noteCodeAPI.Services
     {
         private UserAppRepository _userRepos;
         private IPasswordHasher _passwordHasher;
+        private IConfiguration _configuration;
 
-        public AuthenticationService(UserAppRepository userRepos, IPasswordHasher passwordHasher)
+        public AuthenticationService(UserAppRepository userRepos, IPasswordHasher passwordHasher, IConfiguration configuration)
         {
             _userRepos = userRepos;
             _passwordHasher = passwordHasher;
+            _configuration = configuration;
         }
 
         public async Task<LoginResponseDTO> LoginAsync(string username, string password)
@@ -35,12 +37,12 @@ namespace noteCodeAPI.Services
                         SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
                         {
                             Expires = DateTime.Now.AddHours(1),
-                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")), SecurityAlgorithms.HmacSha256),
+                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["EnvironmentVariables:JWTSecretKey"])), SecurityAlgorithms.HmacSha256),
                             Subject = new ClaimsIdentity(new Claim[]
                             {
-                        new Claim(ClaimTypes.Name, user.Username),
-                        new Claim(ClaimTypes.Role, user.Role.ToString().ToLower()),
-                        new Claim("id", user.Id.ToString())
+                                new Claim(ClaimTypes.Name, user.Username),
+                                new Claim(ClaimTypes.Role, user.Role.ToString().ToLower()),
+                                new Claim("id", user.Id.ToString())
                             }),
                             Issuer = "noteCode",
                             Audience = "noteCode"

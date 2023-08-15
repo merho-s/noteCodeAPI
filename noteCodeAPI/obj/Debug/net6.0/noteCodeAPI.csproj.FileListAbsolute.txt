@@ -360,3 +360,12 @@ C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\staticweb
 C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\obj\Debug\net6.0\staticwebassets.pack.json
 D:\Users\ASUS\Documents\_DEV\Travaux\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\System.Linq.Async.dll
 C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\System.Linq.Async.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Microsoft.AspNetCore.DataProtection.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Microsoft.AspNetCore.DataProtection.Abstractions.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\System.Security.Cryptography.Xml.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Npgsql.dll
+C:\Users\mouss\Documents\_DEV\noteCodeAPI\noteCodeAPI\bin\Debug\net6.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

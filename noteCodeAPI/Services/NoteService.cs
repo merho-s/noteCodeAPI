@@ -35,7 +35,7 @@ namespace noteCodeAPI.Services
                 {
                     Title = noteRequest.Title,
                     Description = noteRequest.Description,
-                    CreationDate = DateTime.Now,
+                    CreationDate = DateTimeOffset.Now,
                     User = loggedUser,
                     Codes = new List<CodeSnippet>(),
                 };

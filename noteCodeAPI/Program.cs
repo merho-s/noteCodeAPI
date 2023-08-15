@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,14 +15,11 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 
-IConfiguration Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -58,16 +56,14 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
+    options.AddPolicy("specificOrigin", policyBuilder =>
+    {
+        policyBuilder.WithOrigins("https://notecode.fr")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
 });
-// LOCAL DATABASE SQLSERVER
-//string currentDirectory = Directory.GetCurrentDirectory();
-//string localDBmdf = @$"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={currentDirectory}\noteCodeDB.mdf;Integrated Security=True;Connect Timeout=30";
-//string localDB = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=noteCodeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-//builder.Services.AddDbContext<DataDbContext>(options =>
-
-//    options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase")),
-//    ServiceLifetime.Scoped
-//);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddDbContext<DataDbContext>();
 builder.Services.AddScoped<NoteRepository>();
 builder.Services.AddScoped<UserAppRepository>();
@@ -79,6 +75,7 @@ builder.Services.AddScoped<NoteService>();
 builder.Services.AddScoped<UserAppService>();
 builder.Services.AddScoped<CodetagService>();
 builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddAuthentication(a =>
 {
@@ -92,8 +89,7 @@ builder.Services.AddAuthentication(a =>
     ValidateLifetime = true,
     ValidateAudience = true,
     ValidAudience = "noteCode",
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)")),
-
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["EnvironmentVariables:JWTSecretKey"])),
 });
 builder.Services.AddAuthorization((builder) =>
 {
@@ -107,19 +103,28 @@ builder.Services.AddAuthorization((builder) =>
         options.RequireRole("admin", "user");
     });
 });
+
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<DataDbContext>();
+    DbInitializer.Initialize(dbContext);
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("all");
+} else
+{
+    app.UseCors("specificOrigin");
 }
 
-
-
 app.UseHttpsRedirection();
-app.UseCors("all");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<LoggingMiddleware>();

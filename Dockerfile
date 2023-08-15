@@ -19,4 +19,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY --from=publish /src/noteCodeAPI/noteCodeDatabase.* .
+EXPOSE 80
+EXPOSE 443
 ENTRYPOINT ["dotnet", "noteCodeAPI.dll"]

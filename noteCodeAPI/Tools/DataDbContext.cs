@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using noteCodeAPI.Models;
 
@@ -20,7 +21,8 @@ namespace noteCodeAPI.Tools
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(_configuration.GetConnectionString("Database"));
+            //optionsBuilder.UseSqlite(_configuration.GetConnectionString("Database"));
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Database"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
