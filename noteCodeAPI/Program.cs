@@ -112,7 +112,6 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.Initialize(dbContext);
 }
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -21,8 +21,14 @@ namespace noteCodeAPI.Tools
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlite(_configuration.GetConnectionString("Database"));
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Database"));
+            if (_configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                optionsBuilder.UseNpgsql(_configuration.GetConnectionString("ProductionDB"));
+            }
+            else
+            {
+                optionsBuilder.UseSqlite(_configuration.GetConnectionString("DevelopmentDB"));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

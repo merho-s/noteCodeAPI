@@ -185,6 +185,20 @@ namespace noteCodeAPI.Services
             else throw new NotFoundUserException();
 
         }
+
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            UserApp userToDelete = await _userRepos.GetByIdAsync(id);
+            if (userToDelete != null)
+            {
+                if (await _userRepos.DeleteAsync(userToDelete))
+                {
+                    return true;
+                }
+                else throw new DatabaseException();
+            }
+            else throw new NotFoundUserException();
+        }
         
     }
 }

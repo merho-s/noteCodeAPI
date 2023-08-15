@@ -61,7 +61,28 @@ namespace noteCodeAPI.Controllers
         [HttpGet("notes")]
         public async Task<IActionResult> GetAllNotesAsync()
         {
-            return Ok(await _noteService.GetAllNotesAsync());
+            try
+            {
+                return Ok(await _noteService.GetAllNotesAsync());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+
+        [HttpDelete("user/{id}")]
+        public async Task<IActionResult> DeleteUserAsync(int id)
+        {
+            try
+            {
+                return Ok(await _userService.DeleteUserAsync(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
     }
