@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace noteCodeAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class initdb : Migration
+    public partial class initpostgresdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace noteCodeAPI.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     token = table.Column<string>(type: "text", nullable: false),
-                    expirationdate = table.Column<DateTime>(name: "expiration_date", type: "timestamp with time zone", nullable: false)
+                    expirationdate = table.Column<DateTime>(name: "expiration_date", type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,7 +64,7 @@ namespace noteCodeAPI.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     title = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
-                    creationdate = table.Column<DateTime>(name: "creation_date", type: "timestamp with time zone", nullable: false),
+                    creationdate = table.Column<DateTimeOffset>(name: "creation_date", type: "timestamp with time zone", nullable: false),
                     userid = table.Column<int>(name: "user_id", type: "integer", nullable: true)
                 },
                 constraints: table =>

@@ -12,8 +12,8 @@ using noteCodeAPI.Tools;
 namespace noteCodeAPI.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    [Migration("20230814232600_change_date_type_datetimeoffset")]
-    partial class changedatetypedatetimeoffset
+    [Migration("20230815010445_init_postgres_db")]
+    partial class initpostgresdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,7 +136,7 @@ namespace noteCodeAPI.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("expiration_date");
 
                     b.Property<string>("JwtToken")
