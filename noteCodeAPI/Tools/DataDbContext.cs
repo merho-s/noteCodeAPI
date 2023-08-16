@@ -13,15 +13,17 @@ namespace noteCodeAPI.Tools
         public DbSet<UnusedActiveToken> UnusedActiveTokens { get; set; }
 
         protected readonly IConfiguration _configuration;
+        private IWebHostEnvironment _environment;
 
-        public DataDbContext(IConfiguration configuration)
+        public DataDbContext(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _configuration = configuration;
+            _environment = webHostEnvironment;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (_configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") == "Production")
+            if (_environment.IsProduction())
             {
                 optionsBuilder.UseNpgsql(_configuration.GetConnectionString("ProductionDB"));
             }
