@@ -8,10 +8,7 @@ namespace noteCodeAPI.Tools
         public static void Initialize(DataDbContext dbContext)
         {
             dbContext.Database.EnsureCreated();
-
-            if (dbContext.Codetags.IsNullOrEmpty())
-            {
-                List<Codetag> codetags = new()
+            List<Codetag> codetags = new()
                 {
                     new Codetag() { Name = "C#" },
                     new Codetag() { Name = "TypeScript" },
@@ -134,8 +131,13 @@ namespace noteCodeAPI.Tools
                     new Codetag() { Name = "SQL Server" },
                     new Codetag() { Name = "Oracle" },
                 };
-                dbContext.Codetags.AddRange(codetags);
-                dbContext.SaveChanges();
+            foreach(Codetag c in codetags)
+            {
+                if(!dbContext.Codetags.Contains(c))
+                {
+                    dbContext.Codetags.Add(c);
+                    dbContext.SaveChanges();
+                }
             }
         }
     }
