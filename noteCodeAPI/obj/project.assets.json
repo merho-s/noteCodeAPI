@@ -4792,19 +4792,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {}
+    "C:\\Users\\mouss\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCode\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
+      "projectUniqueName": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
       "projectName": "noteCodeAPI",
-      "projectPath": "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCode\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\ASUS\\Documents\\_DEV\\Travaux\\noteCode\\noteCodeAPI\\noteCodeAPI\\obj\\",
+      "projectPath": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\noteCodeAPI.csproj",
+      "packagesPath": "C:\\Users\\mouss\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mouss\\Documents\\_DEV\\noteCodeAPI\\noteCodeAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\mouss\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4812,7 +4812,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4903,7 +4902,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
       }
     }
   },
