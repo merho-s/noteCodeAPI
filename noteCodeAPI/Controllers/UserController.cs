@@ -31,10 +31,6 @@ namespace noteCodeAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (NotValidUserException ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
 
         [HttpPost("signout")]
