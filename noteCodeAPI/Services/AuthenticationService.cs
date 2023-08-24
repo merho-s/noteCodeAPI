@@ -59,7 +59,6 @@ namespace noteCodeAPI.Services
                         return loginResponse;
                     }
                 }
-                throw new NotValidUserException();
             }   
             throw new AuthenticationException();
         }
