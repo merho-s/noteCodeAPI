@@ -37,7 +37,6 @@ namespace noteCodeAPI.Services
                     Description = noteRequest.Description,
                     CreationDate = DateTimeOffset.Now,
                     User = loggedUser,
-                    Codes = new List<CodeSnippet>(),
                 };
 
                 if (noteRequest.Codes != null)
@@ -58,7 +57,7 @@ namespace noteCodeAPI.Services
                 {
                     foreach (var t in noteRequest.Codetags)
                     {
-                        var newCodetag = await _codetagRepos.GetByNameAsync(t);
+                        var newCodetag = await _codetagRepos.GetByNameAsync(t.Name);
                         if (newCodetag == null)
                         {
                             throw new TagsDontExistException();
@@ -100,7 +99,7 @@ namespace noteCodeAPI.Services
                         Description = newNote.Description,
                         CreationDate = newNote.CreationDate,
                         Codes = newNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                        Codetags = newNote.Codetags.Select(el => el.Name).ToList()
+                        Codetags = newNote.Codetags.Select(ct => new CodetagDTO() { Id = ct.Id, Name = ct.Name }).ToList()
 
                     };
 
@@ -109,7 +108,7 @@ namespace noteCodeAPI.Services
                 else throw new DatabaseException();
 
             }
-            else throw new NotFoundUserException();
+            else throw new NotFoundException("User not found.");
             
         }
 
@@ -155,14 +154,14 @@ namespace noteCodeAPI.Services
                         Title = n.Title,
                         Description = n.Description,
                         CreationDate = n.CreationDate,
-                        Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                        Codetags = n.Codetags.Select(ct => ct.Name).ToList()
+                        Codes = n.Codes.Select(el => new CodeSnippetDTO { Id = el.Id, Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
+                        Codetags = n.Codetags.Select(ct => new CodetagDTO() { Id = ct.Id, Name = ct.Name }).ToList()
                     };
 
                     notesResponseList.Add(noteResponse);
                 }
                 return notesResponseList.OrderByDescending(note => note.CreationDate).ToList();
-            } throw new NotFoundUserException();
+            } throw new NotFoundException("User not found.");
         }
 
         public async Task<NoteResponseDTO> GetSingleUserNoteAsync(Guid id)
@@ -179,13 +178,13 @@ namespace noteCodeAPI.Services
                         Title = singleNote.Title,
                         Description = singleNote.Description,
                         CreationDate = singleNote.CreationDate,
-                        Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                        Codetags = singleNote.Codetags.Select(ct => ct.Name).ToList()
+                        Codes = singleNote.Codes.Select(el => new CodeSnippetDTO { Id = el.Id, Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
+                        Codetags = singleNote.Codetags.Select(ct => new CodetagDTO() { Id = ct.Id, Name = ct.Name }).ToList()
                     };
                     
                     return noteResponse;
                 }
-                else throw new NotFoundUserException("Actual logged user doesn't have access to this note because it's not his.");
+                else throw new NotFoundException("Actual logged user doesn't have access to this note because it's not his.");
             } else throw new DatabaseException("This note dosen't exist.");
         }
 
@@ -202,13 +201,62 @@ namespace noteCodeAPI.Services
                     Title = n.Title,
                     Description = n.Description,
                     CreationDate = n.CreationDate,
-                    Codes = n.Codes.Select(el => new CodeSnippetDTO { Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
-                    Codetags = n.Codetags.Select(ct => ct.Name).ToList()
+                    Codes = n.Codes.Select(el => new CodeSnippetDTO { Id = el.Id, Code = el.Code, Description = el.Description, Language = el.Language }).ToList(),
+                    Codetags = n.Codetags.Select(ct => new CodetagDTO() { Id = ct.Id, Name = ct.Name }).ToList()
                 };
 
                 notesResponseList.Add(noteResponse);
             }
             return notesResponseList;
+        }
+
+        public async Task<NoteResponseDTO> EditNoteAsync(NoteRequestDTO noteRequest)
+        {
+            Note noteToEdit = await _noteRepos.GetByGuidAsync(noteRequest.Id);
+            if(noteToEdit != null)
+            {
+                noteToEdit.Title = noteRequest.Title;
+                noteToEdit.Description = noteRequest.Description;
+
+                noteToEdit.Codes.Clear();
+                foreach (var c in noteRequest.Codes)
+                {
+                    var existingCode = noteToEdit.Codes.FirstOrDefault(existingCode => existingCode.Id == c.Id);
+                    if (existingCode != null)
+                    {
+                        existingCode.Code = c.Code;
+                        existingCode.Description = c.Description;
+                        existingCode.Language = c.Language;
+                        noteToEdit.Codes.Add(existingCode);
+                    }
+                    else noteToEdit.Codes.Add(new CodeSnippet() { Code = c.Code, Description = c.Description, Language = c.Language });
+                }
+
+                noteToEdit.Codetags.Clear();
+                foreach(var tag in noteRequest.Codetags)
+                {
+                    var foundTag = await _codetagRepos.GetByNameAsync(tag.Name);
+                    if(foundTag == null)
+                    {
+                        throw new TagsDontExistException();
+                    }
+                    noteToEdit.Codetags.Add(foundTag);
+                }
+
+                if (await _noteRepos.UpdateAsync())
+                {
+                    return new NoteResponseDTO()
+                    {
+                        Id = noteToEdit.Id,
+                        Title = noteToEdit.Title,
+                        Description = noteToEdit.Description,
+                        CreationDate = noteToEdit.CreationDate,
+                        Codes = noteToEdit.Codes.Select(c => new CodeSnippetDTO() { Id = c.Id, Code = c.Code, Description = c.Description, Language = c.Language }).ToList(),
+                        Codetags = noteToEdit.Codetags.Select(ct => new CodetagDTO() { Id = ct.Id, Name = ct.Name }).ToList()
+                    };
+                } throw new DatabaseException("The note was not edited because there is no new update.");
+            }
+            throw new NotFoundException("Note not found.");
         }
     }
 }

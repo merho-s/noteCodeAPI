@@ -41,7 +41,7 @@ namespace noteCodeAPI.Services
                     int userId = int.Parse(userClaims.FirstOrDefault(c => c.Type == "id").Value);
                     return await _userRepos.GetByIdAsync(userId);
                 }
-                else throw new NotFoundUserException();
+                else throw new NotFoundException("User not found.");
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace noteCodeAPI.Services
                     return true;
                 }
                 throw new DatabaseException();
-            } throw new NotFoundUserException();              
+            } throw new NotFoundException("User not found.");              
         }
 
 
@@ -182,7 +182,7 @@ namespace noteCodeAPI.Services
                 }
                 else throw new DatabaseException();
             }
-            else throw new NotFoundUserException();
+            else throw new NotFoundException("User not found.");
 
         }
 
@@ -197,7 +197,7 @@ namespace noteCodeAPI.Services
                 }
                 else throw new DatabaseException();
             }
-            else throw new NotFoundUserException();
+            else throw new NotFoundException("User not found.");
         }
         
     }

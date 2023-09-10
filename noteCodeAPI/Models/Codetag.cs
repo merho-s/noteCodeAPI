@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace noteCodeAPI.Models
 {
@@ -16,6 +17,7 @@ namespace noteCodeAPI.Models
         [Column("name")]
         public string Name { get => name; set => name = value; }
 
+        [JsonIgnore]
         public ICollection<Note>? Notes { get => notes; set => notes = value; }
 
         public Codetag()

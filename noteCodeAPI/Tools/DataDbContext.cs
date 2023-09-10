@@ -23,6 +23,7 @@ namespace noteCodeAPI.Tools
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
             if (_environment.IsProduction())
             {
                 optionsBuilder.UseNpgsql(_configuration.GetConnectionString("ProductionDB"));

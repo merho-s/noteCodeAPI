@@ -16,7 +16,7 @@ namespace noteCodeAPI.DTOs
 
         public ICollection<CodeSnippetDTO> Codes { get; set; }
 
-        public ICollection<string> Codetags { get; set; }
+        public ICollection<CodetagDTO> Codetags { get; set; }
         
     }
 }

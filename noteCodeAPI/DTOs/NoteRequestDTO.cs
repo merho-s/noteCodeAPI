@@ -4,6 +4,8 @@ namespace noteCodeAPI.DTOs
 {
     public class NoteRequestDTO
     {
+        public Guid Id { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -12,7 +14,7 @@ namespace noteCodeAPI.DTOs
 
         //public IFormFile Image { get; set; }
 
-        public ICollection<string> Codetags { get; set; }
+        public ICollection<CodetagDTO> Codetags { get; set; }
 
     }
 }

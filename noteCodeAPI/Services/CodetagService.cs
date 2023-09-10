@@ -15,12 +15,12 @@ namespace noteCodeAPI.Services
             _codetagRepos = codetagRepos;
         }
 
-        public async Task<List<string>> GetCodetagsAsync()
+        public async Task<List<CodetagDTO>> GetCodetagsAsync()
         {
             var codetags = await _codetagRepos.GetAllAsync();
             if (codetags != null)
             {
-                return codetags.Select(c => c.Name).ToList();
+                return codetags.Select(ct => new CodetagDTO() { Id = ct.Id, Name = ct.Name }).ToList();
             }
             else throw new DatabaseException();
  

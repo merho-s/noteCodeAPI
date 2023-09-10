@@ -54,7 +54,7 @@ namespace noteCodeAPI.Controllers
             {
                 return Ok(await _userService.EditLoggedUserAsync(userRequest));
             }
-            catch (NotFoundUserException ex)
+            catch (NotFoundException ex)
             {
                 return StatusCode(500, ex.Message);
             }

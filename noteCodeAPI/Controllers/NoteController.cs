@@ -33,7 +33,7 @@ namespace noteCodeAPI.Controllers
                 NoteResponseDTO noteResponse = await _noteService.AddNoteAsync(noteRequest);
                 return Ok(noteResponse);
             } 
-            catch (NotFoundUserException ex)
+            catch (NotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
                 return StatusCode(500, ex.Message);
@@ -64,7 +64,7 @@ namespace noteCodeAPI.Controllers
                 List<NoteResponseDTO> notesResponse = await _noteService.GetUserNotesAsync();
                 return Ok(notesResponse);
             }
-            catch (NotFoundUserException ex)
+            catch (NotFoundException ex)
             { 
                 return StatusCode(500,ex.Message);
             }
@@ -82,7 +82,7 @@ namespace noteCodeAPI.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            catch (NotFoundUserException ex)
+            catch (NotFoundException ex)
             {
                 return StatusCode(500, ex.Message);
             }
@@ -101,5 +101,24 @@ namespace noteCodeAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> EditUserNoteAsync(NoteRequestDTO noteRequest)
+        {
+            try
+            {
+                return Ok(await _noteService.EditNoteAsync(noteRequest));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }
