@@ -13,11 +13,13 @@ namespace noteCodeAPI.Controllers
     {
         private IAuthentication _authenticationService;
         private UserAppService _userService;
+        private MailService _mailService;
 
-        public UserController(IAuthentication authenticationService, UserAppService userService)
+        public UserController(IAuthentication authenticationService, UserAppService userService, MailService mailService)
         {
             _authenticationService = authenticationService;
             _userService = userService;
+            _mailService = mailService;
         }
 
         [HttpPost("login")]
@@ -69,7 +71,10 @@ namespace noteCodeAPI.Controllers
         {
             try
             {
-                return Ok(await _userService.RequestAccessAsync(userRequest));
+                var userResponse = await _userService.RequestAccessAsync(userRequest);
+                _mailService.SendMail(userResponse.Email, userResponse.Username);
+                return Ok(userResponse);
+
             } catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
