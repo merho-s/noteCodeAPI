@@ -8,7 +8,7 @@ namespace noteCodeAPI.DTOs
 
         public string Title { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public ICollection<CodeSnippetDTO> Codes { get; set; }
 

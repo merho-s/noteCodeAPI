@@ -18,7 +18,7 @@ namespace noteCodeAPI.Models
         public string Code { get => code; set => code = value; }
 
         [Column("description")]
-        public string Description { get => description; set => description = value; }
+        public string? Description { get => description; set => description = value; }
 
         [Column("language")]
         public string Language { get => language; set => language = value; }

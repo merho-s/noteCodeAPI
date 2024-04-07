@@ -22,7 +22,7 @@ namespace noteCodeAPI.Models
         public string Title { get => title; set => title = value; }
 
         [Column("description")]
-        public string Description { get => description; set => description = value; }
+        public string? Description { get => description; set => description = value; }
 
         [Column("creation_date")]
         public DateTimeOffset CreationDate { get => creationDate; set => creationDate = value; }

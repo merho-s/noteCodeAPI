@@ -1,0 +1,41 @@
+﻿<Properties StartupConfiguration="{5C523BE6-F549-4B4B-AE85-6AE3D3E644B5}|Default" GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.noteCodeAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="noteCodeAPI/Program.cs">
+    <Files>
+      <File FileName="noteCodeAPI/Services/NoteService.cs" />
+      <File FileName="noteCodeAPI/Controllers/NoteController.cs" />
+      <File FileName="noteCodeAPI/DTOs/NoteResponseDTO.cs" />
+      <File FileName="noteCodeAPI/DTOs/CodeSnippetDTO.cs" />
+      <File FileName="noteCodeAPI/DTOs/CodetagDTO.cs" />
+      <File FileName="noteCodeAPI/Services/CodetagService.cs" />
+      <File FileName="noteCodeAPI/DTOs/NoteRequestDTO.cs" />
+      <File FileName="noteCodeAPI/Models/Codetag.cs" />
+      <File FileName="noteCodeAPI/Controllers/AdminController.cs" />
+      <File FileName="noteCodeAPI/Controllers/UserController.cs" />
+      <File FileName="noteCodeAPI/Properties/launchSettings.json" />
+      <File FileName="noteCodeAPI/Services/UserAppService.cs" />
+      <File FileName="noteCodeAPI/Tools/DataDbContext.cs" />
+      <File FileName="noteCodeAPI/Services/AuthenticationService.cs" />
+      <File FileName="noteCodeAPI/Program.cs" Line="44" Column="56" />
+      <File FileName="noteCodeAPI/.gitignore" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="noteCodeAPI">
+            <Node name="noteCodeAPI" expanded="True">
+              <Node name="Services" expanded="True" />
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
+</Properties>
