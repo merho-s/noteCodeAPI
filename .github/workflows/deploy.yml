@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     env:
-      IMAGE_TAG: test_ci
+      IMAGE_TAG: ${{ secrets.REGISTRY_KEY }}
       IMAGE_NAME: notecode_api
       
     steps:
