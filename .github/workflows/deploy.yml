@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     env:
-      IMAGE_TAG: ${{ secrets.REGISTRY_KEY }}
+      IMAGE_TAG: ${{ vars.REGISTRY_USERNAME }}
       IMAGE_NAME: notecode_api
       
     steps:
