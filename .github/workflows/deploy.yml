@@ -24,8 +24,6 @@ jobs:
         username: ${{ vars.REGISTRY_USERNAME }}
         # Password or personal access token used to log against the Docker registry
         password: ${{ secrets.REGISTRY_KEY }}
-        # Log out from the Docker registry at the end of a job
-        logout: true
           
     
     #- uses: actions/checkout@v4
