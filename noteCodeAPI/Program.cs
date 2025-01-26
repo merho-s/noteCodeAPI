@@ -58,7 +58,7 @@ builder.Services.AddCors(options =>
     });
     options.AddPolicy("specificOrigin", policyBuilder =>
     {
-        policyBuilder.WithOrigins("https://notecode.fr")
+        policyBuilder.WithOrigins(builder.Configuration["AllowedOrigins"])
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
@@ -85,11 +85,11 @@ builder.Services.AddAuthentication(a =>
 {
     ValidateIssuerSigningKey = true,
     ValidateIssuer = true,
-    ValidIssuer = "noteCode",
+    ValidIssuer = builder.Configuration["JWTSettings:Issuer"],
     ValidateLifetime = true,
     ValidateAudience = true,
-    ValidAudience = "noteCode",
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["EnvironmentVariables:JWTSecretKey"])),
+    ValidAudience = builder.Configuration["JWTSettings:Audience"],
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET_KEY"])),
 });
 builder.Services.AddAuthorization((builder) =>
 {
@@ -122,7 +122,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseCors("specificOrigin");
 }
-
+Console.WriteLine(builder.Configuration["JWT_SECRET_KEY"]);
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -132,3 +132,7 @@ app.UseMiddleware<IsTokenBannedMiddleware>();
 app.MapControllers();
 
 app.Run();
+
+
+
+

@@ -9,12 +9,22 @@
     }
   },
   "profiles": {
-    "noteCodeAPI": {
+    "Development": {
       "commandName": "Project",
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7287;http://localhost:5055",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "JWT_SECRET_KEY": "J'suis la clé, j'suis la clé, j'suis la clé, j'suis la clééééé ! (ref à Dora l'Exploratrice, t'as compris ?)"
+      },
+      "dotnetRunMessages": true
+    },
+    "Production": {
+      "commandName": "Project",
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "JWT_SECRET_KEY": "%JWT_SECRET_KEY%"
       },
       "dotnetRunMessages": true
     },
@@ -29,8 +39,8 @@
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {},
-      "useSSL": true,
-      "publishAllPorts": true
+      "publishAllPorts": true,
+      "useSSL": true
     }
   }
 }

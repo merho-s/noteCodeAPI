@@ -37,15 +37,15 @@ namespace noteCodeAPI.Services
                         SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
                         {
                             Expires = DateTime.Now.AddHours(1),
-                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["EnvironmentVariables:JWTSecretKey"])), SecurityAlgorithms.HmacSha256),
+                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_SECRET_KEY"])), SecurityAlgorithms.HmacSha256),
                             Subject = new ClaimsIdentity(new Claim[]
                             {
                                 new Claim(ClaimTypes.Name, user.Username),
                                 new Claim(ClaimTypes.Role, user.Role.ToString().ToLower()),
                                 new Claim("id", user.Id.ToString())
                             }),
-                            Issuer = "noteCode",
-                            Audience = "noteCode"
+                            Issuer = _configuration["JWTSettings:Issuer"],
+                            Audience = _configuration["JWTSettings:Audience"]
 
                         };
                         SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
