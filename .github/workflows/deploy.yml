@@ -20,6 +20,7 @@ jobs:
     - name: Debug secrets and variables
       run: |
           echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
+          echo "SERVER_HOST: ${{ secrets.REGISTRY_USERNAME }}"
           echo "Secrets fetched successfully"
         
     - name: Docker Login
