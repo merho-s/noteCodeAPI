@@ -20,7 +20,7 @@ jobs:
     - name: Debug secrets and variables
       run: |
           echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
-          echo "SERVER_HOST: ${{ secrets.REGISTRY_USERNAME }}"
+          echo "SERVER_HOST: ${{ secrets.SERVER_HOST }}"
           echo "IMAG_TAG": $IMAGE_TAG"
           echo "Secrets fetched successfully"
         
