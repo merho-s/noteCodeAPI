@@ -11,12 +11,19 @@ jobs:
   build:
     environment: noteCodeAPI
     runs-on: ubuntu-22.04
-
+    
     env:
       IMAGE_TAG: test-ci
       IMAGE_NAME: notecode_api
-      
-    steps:        
+
+    steps:
+    - name: Debug secrets and variables
+      run: |
+          echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
+          echo "SERVER_HOST: ${{ secrets.REGISTRY_USERNAME }}"
+          echo "IMAG_TAG": $IMAGE_TAG"
+          echo "Secrets fetched successfully"
+        
     - name: Docker Login
       uses: docker/login-action@v3.3.0
       with:
@@ -25,8 +32,8 @@ jobs:
         # Password or personal access token used to log against the Docker registry
         password: ${{ secrets.REGISTRY_KEY }}
 
-          
-    
+
+
     #- uses: actions/checkout@v4
     #- name: Build the Docker image
     #  run: docker build . --file Dockerfile --tag notecode_api:$IMAGE_TAG
@@ -46,18 +53,3 @@ jobs:
         #password: ${{ secrets.SERVER_PASSWORD }}
         #script: docker pull ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
          #       docker run --name api-notecode -p 2443:443 -e ASPNETCORE_URLS="https://+443;http://+80" -e ASPNETCORE_HTTPS_PORT=443 -e ASPNETCORE_Kestrel__Certificates__Default__Password=${{ secrets.ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PASSWORD }} -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx -v ${{ secrets.ASPNETCORE_KESTREL__CERTIFICATES__DEFAULT__PATH }} -d ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
-
-    
-          
-
-
-
-
-
-
-          
-
-      
-
-
-    
