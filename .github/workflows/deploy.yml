@@ -9,20 +9,14 @@ on:
 jobs:
 
   build:
-
+    environment: noteCodeAPI
     runs-on: ubuntu-22.04
 
     env:
       IMAGE_TAG: test-ci
       IMAGE_NAME: notecode_api
       
-    steps:
-    - name: Debug secrets and variables
-      run: |
-          echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
-          echo "SERVER_HOST: ${{ secrets.REGISTRY_USERNAME }}"
-          echo "Secrets fetched successfully"
-        
+    steps:        
     - name: Docker Login
       uses: docker/login-action@v3.3.0
       with:
