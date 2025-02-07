@@ -45,7 +45,7 @@ jobs:
       with:
         push: true
         platforms: linux/amd64
-        tags: ${{ vars.REGISTRY_USERNAME }}/${IMAGE_NAME}:${IMAGE_TAG}
+        tags: ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
 
     #- name: Connecting to the server with ssh
      # uses: appleboy/ssh-action@v1.2.0
