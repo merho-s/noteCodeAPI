@@ -21,7 +21,7 @@ jobs:
       run: |
           echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
           echo "SERVER_HOST: ${{ secrets.SERVER_HOST }}"
-          echo "IMAG_TAG": $IMAGE_TAG"
+      
           echo "Secrets fetched successfully"
         
     - name: Docker Login
