@@ -12,9 +12,7 @@ jobs:
     environment: noteCodeAPI
     runs-on: ubuntu-22.04
     
-    env:
-      IMAGE_TAG: test-ci
-      IMAGE_NAME: notecode_api
+ 
 
     steps:
     - name: Debug secrets and variables
@@ -41,6 +39,9 @@ jobs:
     #docker build --platform linux/amd64 -t mampao/notecode_webapp:v0.1 .
     - name: Build and push
       uses: docker/build-push-action@v6
+      env:
+        IMAGE_TAG: test-ci
+        IMAGE_NAME: notecode_api
       with:
         push: true
         platforms: linux/amd64
