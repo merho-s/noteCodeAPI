@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Deployment dev
 
 on:
   push:
@@ -11,7 +11,8 @@ jobs:
   build:
     environment: noteCodeAPI
     runs-on: ubuntu-22.04
-    
+    env:
+      IMAGE_NAME: notecode_api
  
 
     steps:
@@ -39,13 +40,11 @@ jobs:
     #docker build --platform linux/amd64 -t mampao/notecode_webapp:v0.1 .
     - name: Build and push
       uses: docker/build-push-action@v6
-      env:
-        IMAGE_TAG: test-ci
-        IMAGE_NAME: notecode_api
+
       with:
         push: true
         platforms: linux/amd64
-        tags: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        tags: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:$(date +%s) ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:dev
 
     #- name: Connecting to the server with ssh
      # uses: appleboy/ssh-action@v1.2.0
