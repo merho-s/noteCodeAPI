@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       IMAGE_NAME: notecode_api
-      DATE: $(date +%YY-%MM-%DD_%HH:%mm)
+      DATE: $(date +%Y-%M-%d_%HH:%mm)
  
 
     steps:
