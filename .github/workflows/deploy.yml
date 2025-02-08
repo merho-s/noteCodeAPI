@@ -21,6 +21,7 @@ jobs:
           echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
           echo "SERVER_HOST: ${{ secrets.SERVER_HOST }}"
           echo "IMAGE_NAME: $IMAGE_NAME"
+          echo "DATE: $(date +%s)"
       
           echo "Secrets fetched successfully"
         
