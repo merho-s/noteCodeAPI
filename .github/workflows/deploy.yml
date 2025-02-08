@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       IMAGE_NAME: notecode_api
-      DATE: $(date +%Y-%M-%d_%HH:%mm)
+      CURRENT_DATE: $(date +%Y%m%d_%H:%M)
  
 
     steps:
@@ -46,7 +46,7 @@ jobs:
       with:
         push: true
         platforms: linux/amd64
-        tags: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.DATE }} ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:dev
+        tags: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.CURRENT_DATE }} ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:dev
 
     #- name: Connecting to the server with ssh
      # uses: appleboy/ssh-action@v1.2.0
