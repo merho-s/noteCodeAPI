@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       IMAGE_NAME: notecode_api
+      DATE: $(date +%YY-%MM-%DD_%HH:%mm)
  
 
     steps:
@@ -21,7 +22,7 @@ jobs:
           echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
           echo "SERVER_HOST: ${{ secrets.SERVER_HOST }}"
           echo "IMAGE_NAME: $IMAGE_NAME"
-          echo "DATE: $(date +%s)"
+          echo "DATE: ${{ env.DATE }}"
       
           echo "Secrets fetched successfully"
         
@@ -45,7 +46,7 @@ jobs:
       with:
         push: true
         platforms: linux/amd64
-        tags: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:$(date +%s) ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:dev
+        tags: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.DATE }} ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:dev
 
     #- name: Connecting to the server with ssh
      # uses: appleboy/ssh-action@v1.2.0
