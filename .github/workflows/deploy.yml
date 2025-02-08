@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       IMAGE_NAME: notecode_api
-      CURRENT_DATE: $(date +%Y%m%d_%H:%M)
+      CURRENT_DATE: $(date +'%Y%m%d_%H:%M')
  
 
     steps:
@@ -22,7 +22,7 @@ jobs:
           echo "REGISTRY_USERNAME: ${{ vars.REGISTRY_USERNAME }}"
           echo "SERVER_HOST: ${{ secrets.SERVER_HOST }}"
           echo "IMAGE_NAME: $IMAGE_NAME"
-          echo "DATE: ${{ env.DATE }}"
+          echo "DATE: ${{ env.CURRENT_DATE }}"
       
           echo "Secrets fetched successfully"
         
