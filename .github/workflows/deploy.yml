@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       IMAGE_NAME: notecode_api
-      #CURRENT_DATE: $(date +'%Y%m%d_%H:%M')
-      CURRENT_DATE: ${{date 'YYYYMMDD'}}
+      CURRENT_DATE: $(date +'%Y%m%d_%H:%M')
+      #CURRENT_DATE: ${{date 'YYYYMMDD'}}
  
 
     steps:
@@ -34,7 +34,15 @@ jobs:
         username: ${{ vars.REGISTRY_USERNAME }}
         # Password or personal access token used to log against the Docker registry
         password: ${{ secrets.REGISTRY_KEY }}
-
+        
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=raw,value=${{ env.CURRENT_DATE }}
+          type=raw,value=dev
 
 
     #- uses: actions/checkout@v4
@@ -47,7 +55,7 @@ jobs:
       with:
         push: true
         platforms: linux/amd64
-        tags: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.CURRENT_DATE }} ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}:dev
+        tags: ${{ steps.meta.outputs.tags }}
 
     #- name: Connecting to the server with ssh
      # uses: appleboy/ssh-action@v1.2.0
