@@ -14,7 +14,6 @@ jobs:
     env:
       IMAGE_NAME: notecode_api
       CURRENT_DATE: $(date %Y%m%d_%H:%M)
-      #CURRENT_DATE: {{date 'YYYYMMDD'}}
  
 
     steps:
@@ -41,7 +40,7 @@ jobs:
       with:
         images: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
         tags: |
-          type=raw,value={{date 'YYYYMMDD'}}
+          type=raw,value={{date 'YYYYMMDD-hh:mm'}}
           type=raw,value=dev
 
 
