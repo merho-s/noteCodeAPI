@@ -29,7 +29,7 @@ jobs:
         
     - name: Docker meta data
       id: meta
-      uses: docker/metadata-action@v4
+      uses: docker/metadata-action@v5.6.1
       with:
         images: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
         tags: |
