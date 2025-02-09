@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       IMAGE_NAME: notecode_api
-      CURRENT_DATE: $(date +'%Y%m%d_%H:%M')
+      CURRENT_DATE: $(date %Y%m%d_%H:%M)
       #CURRENT_DATE: ${{date 'YYYYMMDD'}}
  
 
@@ -41,7 +41,7 @@ jobs:
       with:
         images: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
         tags: |
-          type=raw,value=${{date 'YYYYMMDD'}}
+          type=raw,value=${{ env.CURRENT_DATE }}
           type=raw,value=dev
 
 
