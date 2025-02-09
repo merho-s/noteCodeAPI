@@ -6,6 +6,7 @@ on:
     
 env:
     IMAGE_NAME: notecode_api
+    IMAGE_TAG: test-ci
     
 jobs:
   build-and-deploy:
@@ -34,7 +35,7 @@ jobs:
         images: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
         tags: |
           type=raw,value={{commit_date 'YYYYMMDD-HHmmss' tz='Europe/Paris'}}
-          type=raw,value=dev
+          type=raw,value=test-ci
 
 
     #- uses: actions/checkout@v4
@@ -58,7 +59,7 @@ jobs:
         #password: ${{ secrets.SERVER_PASSWORD }}
         #script: docker login -u ${{ vars.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_KEY }}
          #       docker pull ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:
-                #docker run --name $IMAGE_NAME -p 2443:443 -e ASPNETCORE_URLS="https://+443;http://+80" -e ASPNETCORE_HTTPS_PORT=443 -e ASPNETCORE_Kestrel__Certificates__Default__Password=${{ secrets.CERTIFICATE_PASSWORD }} -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx -v ${{ vars.CERTIFICATE_DIRECTORY }} -d ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:dev
+                #docker run --name $IMAGE_NAME -p 2443:443 -e ASPNETCORE_URLS="https://+443;http://+80" -e ASPNETCORE_HTTPS_PORT=443 -e ASPNETCORE_Kestrel__Certificates__Default__Password=${{ secrets.CERTIFICATE_PASSWORD }} -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx -v ${{ vars.CERTIFICATE_DIRECTORY }} -d ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:test-ci
 
     
 
