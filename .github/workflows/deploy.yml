@@ -40,7 +40,7 @@ jobs:
       with:
         images: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
         tags: |
-          type=raw,value={{date 'YYYYMMDD-hh:mm' tz='Paris/Madrid'}}
+          type=raw,value={{commit_date 'YYYYMMDD-hh:mm' tz='Europe/Paris'}}
           type=raw,value=dev
 
 
