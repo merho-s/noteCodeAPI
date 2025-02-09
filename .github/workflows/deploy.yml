@@ -51,14 +51,14 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         
 
-    #- name: Deployment ssh
-     # uses: appleboy/ssh-action@v1.2.0
-      #with:
-       # host: ${{ secrets.SERVER_HOST }}
-        #username: ${{ secrets.SERVER_USERNAME }}
-        #password: ${{ secrets.SERVER_PASSWORD }}
-        #script: docker login -u ${{ vars.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_KEY }}
-         #       docker pull ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:
+    - name: Deployment ssh
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: docker login -u ${{ vars.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_KEY }}
+                docker pull ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:$IMAGE_TAG
                 #docker run --name $IMAGE_NAME -p 2443:443 -e ASPNETCORE_URLS="https://+443;http://+80" -e ASPNETCORE_HTTPS_PORT=443 -e ASPNETCORE_Kestrel__Certificates__Default__Password=${{ secrets.CERTIFICATE_PASSWORD }} -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx -v ${{ vars.CERTIFICATE_DIRECTORY }} -d ${{ vars.REGISTRY_USERNAME }}/$IMAGE_NAME:test-ci
 
     
