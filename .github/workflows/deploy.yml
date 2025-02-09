@@ -41,7 +41,7 @@ jobs:
       with:
         images: ${{ vars.REGISTRY_USERNAME }}/${{ env.IMAGE_NAME }}
         tags: |
-          type=raw,value=${{ env.CURRENT_DATE }}
+          type=raw,value=${{date 'YYYYMMDD'}}
           type=raw,value=dev
 
 
